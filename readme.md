@@ -10,7 +10,7 @@ This is a Snake Game Server implemented in Java using Maven. The server handles 
 
 ## Requirements
 
-- Java 21 or higher
+- Java 22 or higher
 - Maven 3.6.0 or higher
 
 ## Setup
@@ -27,6 +27,11 @@ This is a Snake Game Server implemented in Java using Maven. The server handles 
    ```sh
    mvn clean install
    ```
+
+### Optional: use jib to build a image locally for each module(cd module and then run the mvn command)
+```sh
+   mvn jib:dockerBuild
+```
 
 ## Configuration
 
