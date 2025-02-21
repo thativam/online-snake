@@ -43,6 +43,10 @@ You can configure the server settings in the `application.properties` file locat
 1. Start the server as described in the setup section.
 2. Connect to the server using a Snake Game client.
 
+## Overview
+![image](https://github.com/user-attachments/assets/318b5d09-b126-43d0-9b47-56f71508de39)
+
+
 ## Contributing
 
 Contributions are welcome! Please fork the repository and submit a pull request.
