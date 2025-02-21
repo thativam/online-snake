@@ -46,6 +46,11 @@ You can configure the server settings in the `application.properties` file locat
 ## Overview
 ![image](https://github.com/user-attachments/assets/318b5d09-b126-43d0-9b47-56f71508de39)
 
+1. + Scalability
+2. + RTS Performance
+3. - Fault tolerance
+4. - Complexity
+5. + Centralized
 
 ## Contributing
 
