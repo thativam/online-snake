@@ -18,8 +18,8 @@ This is a Snake Game Server implemented in Java using Maven. The server handles 
 1. Clone the repository:
 
    ```sh
-   git clone https://github.com/yourusername/snake-game-server.git
-   cd snake-game-server
+   git clone https://github.com/thativam/online-snake.git
+   cd online-snake
    ```
 
 2. Build the project using Maven:
@@ -28,20 +28,11 @@ This is a Snake Game Server implemented in Java using Maven. The server handles 
    mvn clean install
    ```
 
-3. Run the server:
-
-   ```sh
-
-   ```
-
 ## Configuration
 
-You can configure the server settings in the `application.properties` file located in the `src/main/resources` directory.
+You can configure the server settings in the `application.properties` file located in the `src/main/resources` directory for each module.
 
-## Usage
 
-1. Start the server as described in the setup section.
-2. Connect to the server using a Snake Game client.
 
 ## Overview
 ![image](https://github.com/user-attachments/assets/318b5d09-b126-43d0-9b47-56f71508de39)
@@ -51,6 +42,15 @@ You can configure the server settings in the `application.properties` file locat
 3. - Fault tolerance
 4. - Complexity
 5. + Centralized
+## Repository
+Each module will have its pom, for commom dependencys and global build.
+- master-server/
+     - pom.xml
+- server/
+     - pom.xml
+- client/
+     - pom.xml
+- pom.xml
 
 ## Contributing
 
