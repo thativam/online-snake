@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0                               http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?><project xmlns="https://maven.apache.org/POM/4.0.0" xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://maven.apache.org/POM/4.0.0                               https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.snake</groupId>
   <artifactId>online-snake</artifactId>
@@ -8,16 +8,28 @@
     <module>master-server</module>
     <module>client</module>
     <module>server</module>
+    <module>communication</module>
   </modules>
   <properties>
     <java.version>22</java.version>
   </properties>
+  <repositories>
+    <repository>
+      <id>clojars</id>
+      <url>https://clojars.org/repo/</url>
+    </repository>
+  </repositories>
   <dependencyManagement>
     <dependencies>
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
         <version>1.7.36</version>
+      </dependency>
+      <dependency>
+          <groupId>com.esotericsoftware</groupId>
+          <artifactId>kryonet</artifactId>
+          <version>2.22.0-RC1</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
