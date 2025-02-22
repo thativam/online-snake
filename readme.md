@@ -42,11 +42,16 @@ You can configure the server settings in the `application.properties` file locat
 ## Overview
 ![image](https://github.com/user-attachments/assets/318b5d09-b126-43d0-9b47-56f71508de39)
 
-1. + Scalability
-2. + RTS Performance
-3. - Fault tolerance
-4. - Complexity
-5. + Centralized
+Positive Points:
+1. Scalability
+2. RTS Performance
+3. Centralized
+   
+   ---
+
+Negative Points:
+1. Fault tolerance
+2. Complexity
      
 ## Repository
 Each module will have its pom, for commom dependencys and global build.
