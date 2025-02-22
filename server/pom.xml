@@ -43,7 +43,7 @@
           <image>snk-server:latest</image>
         </to>
         <container>
-          <mainClass>com.master.App</mainClass>
+          <mainClass>com.snake.server.App</mainClass>
           <!-- Optionally expose ports -->
           <ports>
             <port>8080</port>

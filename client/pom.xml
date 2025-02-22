@@ -39,10 +39,10 @@
           <image>eclipse-temurin:22</image>
         </from>
         <to>
-          <image>snk-client-server:latest</image>
+          <image>snk-client:latest</image>
         </to>
         <container>
-          <mainClass>com.master.App</mainClass>
+          <mainClass>com.snake.client.App</mainClass>
           <!-- Optionally expose ports -->
           <ports>
             <port>8080</port>
