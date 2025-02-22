@@ -66,9 +66,6 @@ Each module will have its pom, for commom dependencys and global build.
 ## Contributing
 
 ### TODOS
-- General
-   - Add dependabot to update dependencies
-   - Configure github main branch permission
 - Master-Server:
    - Server must listen to client request and then initialize a server for it
    - Control server lifecycle
