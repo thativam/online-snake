@@ -47,6 +47,7 @@ You can configure the server settings in the `application.properties` file locat
 3. - Fault tolerance
 4. - Complexity
 5. + Centralized
+     
 ## Repository
 Each module will have its pom, for commom dependencys and global build.
 - master-server/
@@ -59,8 +60,28 @@ Each module will have its pom, for commom dependencys and global build.
 
 ## Contributing
 
-Contributions are welcome! Please fork the repository and submit a pull request.
+### TODOS
+- Master-Server:
+   - Server must listen to client request and then initialize a server for it
+   - Control server lifecycle
+   - Differ between client and server requests
+   - For now, logs stats into a in memory db
+   - Use some log library
+- Server:
+   - Initialize the module with a pom.xml(use master server as a model)
+   - Must be only initialize/exclude by the master server
+   - For now, logs stats into a in memory db
+   - Use some log library
+   - Just send/receive client menssages
+- Client
+   - Initialize the module with a pom.xml(use master server as a model)
+   - Must send a request to master server to initialize a server
+   - Must connect to the generate server and be able to communicate
+   - For now, logs stats into a in memory db
+   - Use some log library
 
+Contributions are welcome! Please fork the repository and submit a pull request.
+Please for each todo open a branch from Main and then open a PR when its done.
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
