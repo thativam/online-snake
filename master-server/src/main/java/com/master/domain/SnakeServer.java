@@ -5,7 +5,7 @@ import java.io.IOException;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
-import com.snake.server.domain.ISnakeChildServer;
+import com.snake.communication.servClient.Redirect;
 import com.snake.server.service.ISnakeChildService;
 import com.snake.server.service.SnakeChildService;
 
@@ -41,12 +41,8 @@ public class SnakeServer implements ISnakeServer {
                     System.out.println("Spun up child server on port " + port);
 
                     // Prepare the redirect message with the new port number
-                    // Redirect redirect = new Redirect();
-                    // redirect.port = childPort;
-                    // connection.sendTCP(redirect);
-                    // Disconnect the client from the master server
-
-                    // Optionally disconnect the client from the master server
+                    Redirect redirect = new Redirect(port, "localhost");
+                    connection.sendTCP(redirect);
                     connection.close();
                 } catch (Exception e) {
                     e.printStackTrace();
