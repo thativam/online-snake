@@ -39,7 +39,7 @@
           <image>eclipse-temurin:22</image>
         </from>
         <to>
-          <image>snk-master-server:latest</image>
+          <image>snk-client-server:latest</image>
         </to>
         <container>
           <mainClass>com.master.App</mainClass>
