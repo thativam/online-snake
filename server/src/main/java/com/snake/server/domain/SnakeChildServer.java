@@ -14,6 +14,7 @@ public class SnakeChildServer implements ISnakeChildServer {
     }
 
     public void start() {
+        System.out.println("Starting child server");
         server.start();
     }
 

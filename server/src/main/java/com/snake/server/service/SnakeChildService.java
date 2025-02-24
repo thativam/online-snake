@@ -19,6 +19,8 @@ public class SnakeChildService implements ISnakeChildService {
         try {
             server.bind(port);
             server.addClientListener();
+            System.out.println("Child server started on port " + port);
+            System.out.println("Wainting for client to connect...");
         } catch (IOException e) {
             System.out.println("Error binding child server to port " + port + " " + e.getMessage());
         }

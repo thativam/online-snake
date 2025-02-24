@@ -11,12 +11,13 @@ public class MasterServer implements IMasterServer {
 
     public void start(int port, List<Class<?>> communicateClass) {
         server = new SnakeServer();
-        server.start();
         try {
             server.bind(port);
             communicateClass.forEach(c -> {
                 server.register(c);
             });
+            server.addClientListener();
+            server.start();
         } catch (IOException e) {
             System.out.println("Error while trying to bind port" + e);
         }
