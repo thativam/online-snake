@@ -43,9 +43,7 @@ public class SnakeServer implements ISnakeServer {
                     // Prepare the redirect message with the new port number
                     Redirect redirect = new Redirect(port, "localhost");
                     int bytes = connection.sendTCP(redirect);
-                    System.out.println("Sent redirect message to client. Bytes sent: " + bytes);
-                    //connection.close();
-                    //server.dispose();
+                    System.out.println("Sent redirect message to client. Bytes sent: " + bytes);                    
 
                 } catch (Exception e) {
                     e.printStackTrace();

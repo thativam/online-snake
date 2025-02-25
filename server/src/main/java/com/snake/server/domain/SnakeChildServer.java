@@ -5,6 +5,7 @@ import java.io.IOException;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+import com.snake.communication.servClient.Redirect;
 
 public class SnakeChildServer implements ISnakeChildServer {
     private Server server;
@@ -14,7 +15,9 @@ public class SnakeChildServer implements ISnakeChildServer {
     }
 
     public void start() {
-        System.out.println("Starting child server");
+        System.out.println("[SERVER] Starting child server");
+        server.getKryo().register(Redirect.class);
+        server.getKryo().register(String.class);
         server.start();
     }
 
@@ -30,8 +33,13 @@ public class SnakeChildServer implements ISnakeChildServer {
         server.addListener(new Listener() {
             @Override
             public void connected(Connection connection) {
-                System.out.println("Client connected to child server");
-                connection.sendTCP("Hello World from Child Server!");
+                System.out.println("[SERVER] Client connected to child server");
+                connection.sendTCP("[SERVER] Hello World from Child Server!");
+            }
+
+            @Override
+            public void received(Connection connection, Object object) {
+                System.out.println("[SERVER] Received object: " + object);
             }
         });
     }

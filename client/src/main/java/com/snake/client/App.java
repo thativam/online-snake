@@ -43,11 +43,11 @@ public class App
         try {
             // Connect to the snake server at localhost:3003 (adjust host if needed)
             snakeClient.connect(5000, "localhost", 3003);
-            // try {
-            //     Thread.sleep(100);
-            // } catch (InterruptedException e) {
-            //     e.printStackTrace();
-            // }
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             snakeClient.sendTCP("Hello from client");
             // System.out.println("Press Enter to exit...");
             // System.in.read();
@@ -60,13 +60,13 @@ public class App
         Client childClient = new Client();
         childClient.getKryo().register(Redirect.class);
         childClient.getKryo().register(String.class);
+        System.out.println("[CLIENT] Connecting to child server on port " + childPort);
         childClient.addListener(new Listener() {
             @Override
             public void received(Connection connection, Object object) {
                 if (object instanceof String) {
                     String message = (String) object;
                     System.out.println("Message from child server: " + message);
-                    //childClient.close();
                 }
             }
         });
@@ -74,6 +74,12 @@ public class App
         childClient.start();
         try {
             childClient.connect(5000, "localhost", childPort);
+            childClient.sendTCP("Hello from client");
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
