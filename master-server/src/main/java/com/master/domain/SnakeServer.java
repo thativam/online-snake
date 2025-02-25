@@ -51,6 +51,13 @@ public class SnakeServer implements ISnakeServer {
                     e.printStackTrace();
                 }
             }
+            @Override
+            public void received(Connection connection, Object object) {
+                if(object instanceof String && object.equals("ACK")) {
+                    System.out.println("Client ACK ? " + object);
+                    connection.close();
+                }  
+            }
         });
     }
 }
