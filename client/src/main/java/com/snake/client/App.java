@@ -24,16 +24,12 @@ public class App
 
             @Override
             public void received(Connection connection, Object object) {
-                System.out.println("Received object: " + object);   
+                System.out.println("Received object: " + object);
                 if (object instanceof Redirect) {
                     Redirect redirect = (Redirect) object;
                     System.out.println("Received redirect. New server port: " + redirect.getPort());
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    //snakeClient.close();
+                    
+                    connection.sendTCP("ACK");
                     connectToChildServer(redirect.getPort());
                 }
             }
@@ -47,6 +43,14 @@ public class App
         try {
             // Connect to the snake server at localhost:3003 (adjust host if needed)
             snakeClient.connect(5000, "localhost", 3003);
+            // try {
+            //     Thread.sleep(100);
+            // } catch (InterruptedException e) {
+            //     e.printStackTrace();
+            // }
+            snakeClient.sendTCP("Hello from client");
+            // System.out.println("Press Enter to exit...");
+            // System.in.read();
         } catch (IOException e) {
             e.printStackTrace();
         }
