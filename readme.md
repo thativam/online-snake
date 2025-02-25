@@ -66,21 +66,24 @@ Each module will have its pom, for commom dependencys and global build.
 ## Contributing
 
 ### TODOS
+- General
+   - Add dependabot to update dependencies
+   - Configure github main branch permission ✅
 - Master-Server:
-   - Server must listen to client request and then initialize a server for it
-   - Control server lifecycle
-   - Differ between client and server requests
+   - Server must listen to client request and then initialize a server for it ✅
+   - Control server lifecycle ✅
+   - Differ between client and server requests 
    - For now, logs stats into a in memory db
    - Use some log library
 - Server:
    - Initialize the module with a pom.xml (use master server as a model) ✅
-   - Must be only initialize/exclude by the master server
+   - Must be only initialize/exclude by the master server ✅
    - For now, logs stats into a in memory db
    - Use some log library
    - Just send/receive client menssages
 - Client
    - Initialize the module with a pom.xml(use master server as a model) ✅
-   - Must send a request to master server to initialize a server
+   - Must send a request to master server to initialize a server ✅
    - Must connect to the generate server and be able to communicate
    - For now, logs stats into a in memory db
    - Use some log library
