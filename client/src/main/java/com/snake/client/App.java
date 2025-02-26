@@ -7,14 +7,13 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.snake.communication.servClient.Redirect;
 
-
-public class App 
-{
+public class App {
     public static void main(String[] args) {
+
         Client snakeClient = new Client();
         snakeClient.start();
         snakeClient.getKryo().register(Redirect.class);
-        snakeClient.getKryo().register(String.class); 
+        snakeClient.getKryo().register(String.class);
         System.out.println("Client starting ...   ");
         snakeClient.addListener(new Listener() {
             @Override
@@ -28,7 +27,7 @@ public class App
                 if (object instanceof Redirect) {
                     Redirect redirect = (Redirect) object;
                     System.out.println("Received redirect. New server port: " + redirect.getPort());
-                    
+
                     connection.sendTCP("ACK");
                     connectToChildServer(redirect.getPort());
                 }
