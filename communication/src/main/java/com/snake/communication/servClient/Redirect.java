@@ -1,24 +1,15 @@
 package com.snake.communication.servClient;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Redirect {
     int port;
     String addr;
-    public Redirect() {
-    }
-    public int getPort() {
-        return port;
-    }
-    public void setPort(int port) {
-        this.port = port;
-    }
-    public String getAddr() {
-        return addr;
-    }
-    public void setAddr(String addr) {
-        this.addr = addr;
-    }
-    public Redirect(int port, String addr) {
-        this.port = port;
-        this.addr = addr;
-    }
 }
