@@ -14,6 +14,7 @@ public class App {
         snakeClient.start();
         snakeClient.getKryo().register(Redirect.class);
         snakeClient.getKryo().register(String.class);
+        
         System.out.println("Client starting ...   ");
         snakeClient.addListener(new Listener() {
             @Override
