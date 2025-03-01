@@ -39,7 +39,7 @@ public class SnakeChildServer implements ISnakeChildServer {
 
             @Override
             public void received(Connection connection, Object object) {
-                System.out.println("[SERVER] Received object: " + object);
+                System.out.println("[SERVER] Received object: " + object);                
             }
         });
     }
