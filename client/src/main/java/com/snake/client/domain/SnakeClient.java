@@ -38,4 +38,9 @@ public class SnakeClient implements ISnakeClient {
         }
     }
 
+    @Override
+    public int sendString(String msg) {
+        return client.sendTCP(msg);
+    }
+
 }

@@ -11,4 +11,6 @@ public interface ISnakeClient {
 
     public void connect(int timeout, String host, int port);
 
+    public int sendString(String msg);
+
 }

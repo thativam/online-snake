@@ -1,87 +1,35 @@
 package com.snake.client;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.esotericsoftware.kryonet.Client;
-import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.Listener;
+import com.snake.client.service.ISnakeClientService;
+import com.snake.client.service.SnakeClientService;
+import com.snake.client.domain.SnakeClient;
 import com.snake.communication.servClient.Redirect;
 
 public class App {
     public static void main(String[] args) {
-
-        Client snakeClient = new Client();
-        snakeClient.start();
-        snakeClient.getKryo().register(Redirect.class);
-        snakeClient.getKryo().register(String.class);
         
-        System.out.println("Client starting ...   ");
-        snakeClient.addListener(new Listener() {
-            @Override
-            public void connected(Connection connection) {
-                System.out.println("Client connected to server: " + connection.getRemoteAddressTCP());
-            }
+        ISnakeClientService service = new SnakeClientService(new SnakeClient(new Client()));
+        service.startClient(new ArrayList<>(List.of(Redirect.class, String.class)));
 
-            @Override
-            public void received(Connection connection, Object object) {
-                System.out.println("Received object: " + object);
-                if (object instanceof Redirect) {
-                    Redirect redirect = (Redirect) object;
-                    System.out.println("Received redirect. New server port: " + redirect.getPort());
-
-                    connection.sendTCP("ACK");
-                    connectToChildServer(redirect.getPort());
-                }
-            }
-
-            @Override
-            public void disconnected(Connection connection) {
-                System.out.println("Client disconnected from server");
-            }
-        });
 
         try {
-            // Connect to the snake server at localhost:3003 (adjust host if needed)
-            snakeClient.connect(5000, "localhost", 3003);
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            snakeClient.sendTCP("Hello from client");
-            // System.out.println("Press Enter to exit...");
-            // System.in.read();
+            service.connectToServer();
+            service.sendTCPStringMs("Hello from client");
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private static void connectToChildServer(int childPort) {
-        Client childClient = new Client();
-        childClient.getKryo().register(Redirect.class);
-        childClient.getKryo().register(String.class);
-        System.out.println("[CLIENT] Connecting to child server on port " + childPort);
-        childClient.addListener(new Listener() {
-            @Override
-            public void received(Connection connection, Object object) {
-                if (object instanceof String) {
-                    String message = (String) object;
-                    System.out.println("Message from child server: " + message);
-                }
-            }
-        });
-
-        childClient.start();
+        
+        System.out.println("Press Enter to exit...");
         try {
-            childClient.connect(5000, "localhost", childPort);
-            childClient.sendTCP("Hello from client");
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            System.in.read();
         } catch (IOException e) {
             e.printStackTrace();
         }
+       
     }
 }

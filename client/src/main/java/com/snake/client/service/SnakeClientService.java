@@ -1,7 +1,9 @@
 package com.snake.client.service;
 
+import java.io.IOException;
 import java.util.List;
 
+import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.snake.client.domain.ISnakeClient;
@@ -18,6 +20,9 @@ public class SnakeClientService implements ISnakeClientService {
     private ISnakeClient childClient;
     private List<Class<?>> classes;
 
+    public SnakeClientService(ISnakeClient client) {
+        this.client = client;
+    }
     @Override
     public void startClient(List<Class<?>> classes) {
         client.start();
@@ -46,34 +51,54 @@ public class SnakeClientService implements ISnakeClientService {
 
             @Override
             public void disconnected(Connection connection) {
-                System.out.println("Client disconnected from server");
+                System.out.println("Client disconnected from Master Server");
             }
         });
     }
 
     @Override
     public void connectToServer() {
-        client.connect(5000, "localhost", 54555);
+        client.connect(5000, "localhost", 3003);
     }
 
     public ISnakeClient connectToChildServer(int childPort) {
-        childClient = new SnakeClient();
+        childClient = new SnakeClient(new Client());
         childClient.start();
         for (Class<?> clazz : classes) {
             client.register(clazz);
         }
-        client.addListener(new Listener() {
+        childClient.addListener(new Listener() {
             @Override
             public void received(Connection connection, Object object) {
-                if (object instanceof String) {
-                    String message = (String) object;
-                    System.out.println("Message from child server: " + message);
-                }
+                System.out.println("[CLIENT] Message from child server: " + object);
+            }
+
+            @Override
+            public void disconnected(Connection connection) {
+                System.out.println("Client disconnected from Child Server");
             }
         });
+        
         childClient.connect(5000, "localhost", childPort);
-        //Add a sleep to receive the message from the child server
+        
+        childClient.sendString("Hello from client");
         return childClient;
+    }
+
+
+    @Override
+    public int sendTCPStringMs(String message) throws IOException {
+        int bytesSent = client.sendString(message);
+        return bytesSent;
+    }
+
+    @Override
+    public int sendTCPStringSv(String message) throws IOException {
+        if(childClient != null) {
+            int bytesSent = childClient.sendString(message);
+            return bytesSent;
+        }
+        return -1;
     }
 
 }
