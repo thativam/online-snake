@@ -1,6 +1,9 @@
 package com.master.domain;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -12,6 +15,7 @@ import com.snake.server.service.SnakeChildService;
 public class SnakeServer implements ISnakeServer {
     private Server server;
     private ISnakeChildService childService;
+    private List<Connection> connections = Collections.synchronizedList(new ArrayList<>());
 
     public SnakeServer() {
         this.server = new Server();
@@ -35,6 +39,7 @@ public class SnakeServer implements ISnakeServer {
             @Override
             public void connected(Connection connection) {
                 System.out.println("Client connected to master from " + connection.getRemoteAddressTCP());
+                connections.add(connection);
                 try {
                     // Create and start a child server on a dynamic port
                     int port = childService.startChild();
@@ -55,6 +60,12 @@ public class SnakeServer implements ISnakeServer {
                     System.out.println("Client ACK ? " + object);
                     connection.close();
                 }  
+            }
+
+            @Override
+            public void disconnected(Connection connection) {
+                System.out.println("Client disconnected from master");
+                connections.remove(connection);
             }
         });
     }
