@@ -5,9 +5,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
-import java.util.stream.Collectors;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -19,12 +16,17 @@ import com.snake.server.service.SnakeChildService;
 public class SnakeServer implements ISnakeServer {
     private Server server;
     private ISnakeChildService childService;
+    private MatchMakingPlayers matchMakingPlayers;
     // TODO: how to control this list? i.e when to remove server
     private Set<Integer> connections = Collections.synchronizedSet( new HashSet<>()); // store just the port, but should save host+port for each generated server.
     private static final int MAX_PLAYERS = 4;
     public SnakeServer() {
         this.server = new Server();
         this.childService = new SnakeChildService();
+    }
+
+    public void setMatchMakingPlayers(MatchMakingPlayers matchMakingPlayers) {
+        this.matchMakingPlayers = matchMakingPlayers;
     }
 
     public void start() {
@@ -78,21 +80,11 @@ public class SnakeServer implements ISnakeServer {
 
     private int handleNewServers(){
         Map<Integer, Connection[]> activeConnections = childService.getActiveConnections();
-        if(activeConnections.isEmpty()) {
-            System.out.println("No active connections");
-            return -1;
+        if(matchMakingPlayers == null) {
+            System.out.println("No strategy for matchmaking");
+            return childService.startChild();
         }
-
-        @SuppressWarnings("unused")
-        SortedMap<Integer, Connection[]> sortedConnections = activeConnections.entrySet().stream()
-            .sorted((entry1, entry2) -> Integer.compare(entry1.getValue().length, entry2.getValue().length))
-            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1,e2) -> e1, TreeMap::new));
-        
-        while ((sortedConnections.size() > 0) && (sortedConnections.get(sortedConnections.lastKey()).length == MAX_PLAYERS)) {
-            sortedConnections.remove(sortedConnections.lastKey());
-        }
-
-        return sortedConnections.isEmpty() ? -1 : sortedConnections.lastKey(); // with the most connection
-        // use strategy pattern ?
+        Integer port = matchMakingPlayers.handleNewPlayers(activeConnections, MAX_PLAYERS);
+        return port == -1 ? childService.startChild() : port;
     }
 }

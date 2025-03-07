@@ -3,7 +3,9 @@ package com.master.service;
 import java.io.IOException;
 import java.util.List;
 
+import com.master.domain.DefaultMatchMaking;
 import com.master.domain.ISnakeServer;
+import com.master.domain.MatchMakingPlayers;
 import com.master.domain.SnakeServer;
 
 public class MasterServer implements IMasterServer {
@@ -11,6 +13,8 @@ public class MasterServer implements IMasterServer {
 
     public void start(int port, List<Class<?>> communicateClass) {
         server = new SnakeServer();
+        MatchMakingPlayers matchMakingPlayers = new DefaultMatchMaking();
+        server.setMatchMakingPlayers(matchMakingPlayers);
         try {
             server.bind(port);
             communicateClass.forEach(c -> {
