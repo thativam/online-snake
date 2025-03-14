@@ -1,4 +1,4 @@
-package src;
+package com.snake.client.application.src;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ public class Score {
         BufferedReader reader = null;
         try {
             // ReadFile highscore.dat
-            readFile = new FileReader("highscore.dat");
+            readFile = new FileReader("client\\src\\main\\java\\com\\snake\\client\\resources\\highscore.dat");
             reader = new BufferedReader(readFile);
 
             String line = reader.readLine();
@@ -76,7 +76,7 @@ public class Score {
         BufferedWriter writer = null;
         List<Integer> list = new ArrayList<Integer>();
         try {
-            readFile = new FileReader("highscore.dat");
+            readFile = new FileReader("client\\src\\main\\java\\com\\snake\\client\\resources\\highscore.dat");
             reader = new BufferedReader(readFile);
 
             String line = reader.readLine();
@@ -94,7 +94,7 @@ public class Score {
             Collections.reverse(list);
 
             // Tulis ke highscore.dat, score yang udah diurutin
-            writeFile = new FileWriter("highscore.dat");
+            writeFile = new FileWriter("client\\src\\main\\java\\com\\snake\\client\\resources\\highscore.dat");
             writer = new BufferedWriter(writeFile);
 
             int size = list.size();
@@ -136,7 +136,7 @@ public class Score {
         String newScore = String.valueOf(this.getScore());
 
         // Buat file untuk simpan highscorenya
-        File scoreFile = new File("highscore.dat");
+        File scoreFile = new File("client\\src\\main\\java\\com\\snake\\client\\resources\\highscore.dat");
 
         // Jika file highscore.datnya tidak ada
         if (!scoreFile.exists()) {

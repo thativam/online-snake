@@ -1,4 +1,4 @@
-package src;
+package com.snake.client.application.src;
 
 import java.awt.Color;
 
@@ -11,9 +11,9 @@ public class SnakeGame {
 
         obj.setBounds(10, 10, 910, 750);
         obj.setBackground(Color.DARK_GRAY);
+        obj.add(gameplay);
         obj.setResizable(false);
         obj.setVisible(true);
         obj.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        obj.add(gameplay);
     }
 }

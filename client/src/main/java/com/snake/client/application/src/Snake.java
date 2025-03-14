@@ -1,4 +1,4 @@
-package src;
+package com.snake.client.application.src;
 
 public class Snake {
     int[] snakexLength = new int[750];

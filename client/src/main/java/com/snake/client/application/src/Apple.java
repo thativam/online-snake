@@ -1,4 +1,4 @@
-package src;
+package com.snake.client.application.src;
 
 import java.util.Random;
 

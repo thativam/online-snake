@@ -1,18 +1,18 @@
-package src;
+package com.snake.client.application.src;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
-
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.event.KeyListener;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.Font;
 
 public class Gameplay extends JPanel implements KeyListener, ActionListener {
     Snake snake = new Snake();
@@ -72,7 +72,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         g.setColor(Color.WHITE);
         g.drawRect(24, 10, 852, 55);
 
-        titleImage = new ImageIcon("images/title.png");
+        titleImage = new ImageIcon("client\\src\\main\\java\\com\\snake\\client\\resources\\gameImages\\title.png");
         titleImage.paintIcon(this, g, 25, 11);
 
         g.setColor(Color.WHITE);
@@ -103,42 +103,42 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         g.drawString("Posição cobra: X: " + snake.snakexLength[0] + " Y: "+ snake.snakeyLength[0], 600, 570);
        
 
-        arrowImage = new ImageIcon("images/keyboardArrow.png");
+        arrowImage = new ImageIcon("client\\src\\main\\java\\com\\snake\\client\\resources\\gameImages\\keyboardArrow.png");
         arrowImage.paintIcon(this, g, 670, 590);
         g.setFont(new Font("Helvetica", Font.PLAIN, 16));
         g.drawString("Movement", 770, 590);
 
-        shiftImage = new ImageIcon("images/shift.png");
+        shiftImage = new ImageIcon("client\\src\\main\\java\\com\\snake\\client\\resources\\gameImages\\shift.png");
         shiftImage.paintIcon(this, g, 695, 625);
         g.drawString("Boost", 770, 640);
 
-        snakeHead = new ImageIcon("images/snakeHead4.png");
+        snakeHead = new ImageIcon("client\\src\\main\\java\\com\\snake\\client\\resources\\gameImages\\snakeHead4.png");
         snakeHead.paintIcon(this, g, snake.snakexLength[0], snake.snakeyLength[0]);
         snakeHead.paintIcon(this, g, snake2.snakexLength[0], snake2.snakeyLength[0]);
 
         for (int i = 0; i < snake.lengthOfSnake; i++) {
             if (i == 0 && (snake.right || snake.left || snake.up || snake.down)) {
-                snakeHead = new ImageIcon("images/snakeHead4.png");
+                snakeHead = new ImageIcon("client\\src\\main\\java\\com\\snake\\client\\resources\\gameImages\\snakeHead4.png");
                 snakeHead.paintIcon(this, g, snake.snakexLength[i], snake.snakeyLength[i]);
             }
             if (i != 0) {
-                snakeBody = new ImageIcon("images/snakeimage4.png");
+                snakeBody = new ImageIcon("client\\src\\main\\java\\com\\snake\\client\\resources\\gameImages\\snakeimage4.png");
                 snakeBody.paintIcon(this, g, snake.snakexLength[i], snake.snakeyLength[i]);
             }
         }
 
         for (int i = 0; i < snake2.lengthOfSnake; i++) {
             if (i == 0) {
-                snakeHead = new ImageIcon("images/snakeHead4.png");
+                snakeHead = new ImageIcon("client\\src\\main\\java\\com\\snake\\client\\resources\\gameImages\\snakeHead4.png");
                 snakeHead.paintIcon(this, g, snake2.snakexLength[i], snake2.snakeyLength[i]);
             }
             if (i != 0) {
-                snakeBody = new ImageIcon("images/snakeimage4.png");
+                snakeBody = new ImageIcon("client\\src\\main\\java\\com\\snake\\client\\resources\\gameImages\\snakeimage4.png");
                 snakeBody.paintIcon(this, g, snake2.snakexLength[i], snake2.snakeyLength[i]);
             }
         }
 
-        appleImage = new ImageIcon("images/apple4.png");
+        appleImage = new ImageIcon("client\\src\\main\\java\\com\\snake\\client\\resources\\gameImages\\apple4.png");
         for(int i = 0; i < apples.length ;i++){
             if (apples[i].getappleXPos() == snake.snakexLength[0] && (apples[i].getappleYPos() == snake.snakeyLength[0])) {
                 snake.lengthOfSnake++;
