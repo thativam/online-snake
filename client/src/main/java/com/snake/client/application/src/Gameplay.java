@@ -34,8 +34,6 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
     private ImageIcon appleImage;
 
-    private Random random = new Random();
-
     private ImageIcon titleImage;
 
     Score score = new Score();
@@ -92,8 +90,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         g.drawString("SCORE : " + score.getScore(), 720, 110);
         g.drawRect(653, 130, 221, 1);
 
-        score.sortHighScore();
-        highScore = score.getHighScore();
+        
+        highScore = score.getHighscore();
         g.drawString("HIGHSCORE", 705, 180);
         drawString(g, highScore, 705, 200);
 

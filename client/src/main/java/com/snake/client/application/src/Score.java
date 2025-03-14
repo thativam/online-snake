@@ -1,129 +1,123 @@
 package com.snake.client.application.src;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.snake.client.utils.StringUtils;
+
 public class Score {
     private int score;
-
-    //konstruktor
+    private List<Integer> highScoreList;
+    private String scoreFilePath = "client\\src\\main\\java\\com\\snake\\client\\resources\\highscore.dat";
+    
     public Score(){
         this.score=0;
+        this.highScoreList = new ArrayList<Integer>();
+        readFile();
     }
 
-    //menambah score
     public void increaseScore(){
         this.score++;
     }
 
-    //reset Score
     public void resetScore(){
         this.score=0;
     }
 
-    //untuk mengembalikan nilai score ke tampilan Gameplay
     public int getScore(){
         return this.score;
     }
 
-    // Fungsi buat ambil HighScore
-    public String getHighScore() {
+    public List<Integer> getHighScore() {
+        if(highScoreList.size() == 0){
+            readFile();
+            return highScoreList;
+        }
+        return highScoreList;
+    }
+
+    public String getHighscore(){
+        highScoreList.sort((a,b)->b-a);
+        if(highScoreList.size() == 0){
+            readFile();
+            return StringUtils.stringFormat(highScoreList);
+        }
+        return StringUtils.stringFormat(highScoreList);
+    }
+
+    private void readFile(){
         FileReader readFile = null;
         BufferedReader reader = null;
         try {
-            // ReadFile highscore.dat
-            readFile = new FileReader("client\\src\\main\\java\\com\\snake\\client\\resources\\highscore.dat");
+            readFile = new FileReader(scoreFilePath);
             reader = new BufferedReader(readFile);
 
             String line = reader.readLine();
+            highScoreList.add(Integer.parseInt(line));
             String allLines = line;
 
             while (line != null) {
-                // Baca per baris
                 line = reader.readLine();
-                // Ini ada untuk error handling
+                
                 if (line == null)
                     break;
-                // Gabunging barisnya
+                highScoreList.add(Integer.parseInt(line));
                 allLines = allLines.concat("\n" + line);
             }
 
-            // return String yang persis seperti isi dari highscore.dat
-            return allLines;
         }
-        // Kalau highscore.dat nya gaada
         catch (Exception e) {
-            return "0\n0\n0\n0\n0\n0\n0\n0\n0\n0";
+            System.out.println("there was a problem reading the file"+ e);
         } finally {
             try {
-                // Tutup readernya
                 if (reader != null)
                     reader.close();
-            } // Kalau terjadi exception
+            } 
             catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    //fungsi untuk mengurutkan high score
-    public void sortHighScore() {
-        FileReader readFile = null;
-        BufferedReader reader = null;
+    public void writeFile() {
+        
         FileWriter writeFile = null;
         BufferedWriter writer = null;
         List<Integer> list = new ArrayList<Integer>();
         try {
-            readFile = new FileReader("client\\src\\main\\java\\com\\snake\\client\\resources\\highscore.dat");
-            reader = new BufferedReader(readFile);
+            
 
-            String line = reader.readLine();
-
-            // Pindahkan isi dari highscore.dat ke sebuah array List
-            while (line != null) {
-                list.add(Integer.parseInt(line));
-                line = reader.readLine();
-            }
-
-            // Sort array listnya
-            Collections.sort(list);
-
-            // Balikin biar jadi descending
-            Collections.reverse(list);
-
-            // Tulis ke highscore.dat, score yang udah diurutin
             writeFile = new FileWriter("client\\src\\main\\java\\com\\snake\\client\\resources\\highscore.dat");
             writer = new BufferedWriter(writeFile);
 
             int size = list.size();
 
-            // Nantinya akan hanya 10 skor teratas yang ditulis kembali
             for (int i = 0; i < 10; i++) {
-                // Ini untuk mengisi nilai lainnya 0
                 if (i > size - 1) {
                     String def = "0";
                     writer.write(def);
-                } else { // Ambil satu satu dari list
+                } else { 
                     String str = String.valueOf(list.get(i));
                     writer.write(str);
                 }
-                if (i < 9) {// This prevent creating a blank like at the end of the file**
+                if (i < 9) {
                     writer.newLine();
                 }
             }
         } catch (Exception e) {
-            return;
+            System.out.println("there was a problem writing the file"+ e);
         } finally {
             try {
-                // Tutup readernya
-                if (reader != null)
-                    reader.close();
-                // Tutup writer
                 if (writer != null)
                     writer.close();
-            } // Kalau terjadi exception
+            } 
             catch (IOException e) {
                 return;
             }
@@ -131,7 +125,6 @@ public class Score {
 
     }
 
-    // Fungsi buat nulis score baru di file
     public void saveNewScore() {
         String newScore = String.valueOf(this.getScore());
 
@@ -152,7 +145,6 @@ public class Score {
         BufferedWriter writer = null;
 
         try {
-            // Tulis new scorenya di file
             writeFile = new FileWriter(scoreFile, true);
             writer = new BufferedWriter(writeFile);
             writer.write(newScore);
@@ -167,5 +159,10 @@ public class Score {
             }
         }
 
+    }
+
+    public static void main(String[] args){
+        Score score = new Score();
+        System.out.println(score.getHighScore());
     }
 }
