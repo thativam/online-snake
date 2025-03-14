@@ -17,7 +17,7 @@ import java.awt.Font;
 public class Gameplay extends JPanel implements KeyListener, ActionListener {
     Snake snake = new Snake();
 
-    Apple apple = new Apple();
+    Apple[] apples = new Apple[5];
 
     private ImageIcon snakeHead;
 
@@ -43,6 +43,9 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     private ImageIcon shiftImage;
 
     public Gameplay() {
+        for(int i = 0; i < apples.length; i++) {
+            apples[i] = new Apple(); // Criando cada instância
+        }
         addKeyListener(this);
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
@@ -89,7 +92,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
         g.drawRect(653, 490, 221, 1);
         g.setFont(new Font("Helvetica", Font.BOLD, 15));
-        g.drawString("Posição Maçã: " + apple.printPosition(), 600, 530);
+        g.drawString("Posição Maçã: " + apples[0].printPosition(), 600, 530);
         g.drawString("Posição cobra: X: " + snake.snakexLength[0] + " Y: "+ snake.snakeyLength[0], 600, 570);
        
 
@@ -117,15 +120,18 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         }
 
         appleImage = new ImageIcon("images/apple4.png");
-
-        if (apple.getappleXPos() == snake.snakexLength[0] && (apple.getappleYPos() == snake.snakeyLength[0])) {
-            snake.lengthOfSnake++;
-            score.increaseScore();
-            apple = new Apple();
+        for(int i = 0; i < apples.length ;i++){
+            if (apples[i].getappleXPos() == snake.snakexLength[0] && (apples[i].getappleYPos() == snake.snakeyLength[0])) {
+                snake.lengthOfSnake++;
+                score.increaseScore();
+                apples[i] = new Apple();
+            }
         }
 
         if (snake.moves != 0) {
-            appleImage.paintIcon(this, g, apple.getappleXPos(), apple.getappleYPos());
+            for(int i = 0; i < apples.length; i++) {
+                appleImage.paintIcon(this, g, apples[i].getappleXPos(), apples[i].getappleYPos());
+            }
         }
 
         if (snake.moves == 0) {
