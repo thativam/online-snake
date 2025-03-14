@@ -9,9 +9,14 @@ import com.snake.communication.servClient.Redirect;
 
 public class SnakeChildServer implements ISnakeChildServer {
     private Server server;
+    private Integer port;
 
     public SnakeChildServer() {
         this.server = new Server();
+    }
+
+    public Integer getPort() {
+        return port;
     }
 
     public void start() {
@@ -22,6 +27,7 @@ public class SnakeChildServer implements ISnakeChildServer {
     }
 
     public void bind(int port) throws IOException {
+        this.port = port;
         server.bind(port);
     }
 
@@ -39,8 +45,19 @@ public class SnakeChildServer implements ISnakeChildServer {
 
             @Override
             public void received(Connection connection, Object object) {
-                System.out.println("[SERVER] Received object: " + object);                
+                System.out.println("[SERVER] Received object: " + object);
+            }
+
+            @Override
+            public void disconnected(Connection connection) {
+                System.out.println("[SERVER] Client disconnected from child server");
             }
         });
+    }
+
+    public Connection[] getActiveConnections() {
+        System.out.println("[SERVER] Active connections: " + server.getConnections().length);
+
+        return server.getConnections();
     }
 }

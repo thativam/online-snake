@@ -10,4 +10,6 @@ public interface ISnakeServer {
     public void register(Class<?> clazz);
 
     public void addClientListener();
+
+    public void setMatchMakingPlayers(MatchMakingPlayers matchMakingPlayers);
 }
