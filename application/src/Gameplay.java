@@ -33,9 +33,6 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
     private Random random = new Random();
 
-    private int xPos = random.nextInt(81);
-    private int yPos = random.nextInt(69);
-
     private ImageIcon titleImage;
 
     Score score = new Score();
@@ -91,11 +88,13 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         drawString(g, highScore, 705, 200);
 
         g.drawRect(653, 490, 221, 1);
-        g.setFont(new Font("Helvetica", Font.BOLD, 25));
-        g.drawString("CONTROLS", 690, 530);
+        g.setFont(new Font("Helvetica", Font.BOLD, 15));
+        g.drawString("Posição Maçã: " + apple.printPosition(), 600, 530);
+        g.drawString("Posição cobra: X: " + snake.snakexLength[0] + " Y: "+ snake.snakeyLength[0], 600, 570);
+       
 
         arrowImage = new ImageIcon("images/keyboardArrow.png");
-        arrowImage.paintIcon(this, g, 670, 560);
+        arrowImage.paintIcon(this, g, 670, 590);
         g.setFont(new Font("Helvetica", Font.PLAIN, 16));
         g.drawString("Movement", 770, 590);
 
@@ -119,15 +118,14 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
         appleImage = new ImageIcon("images/apple4.png");
 
-        if ((apple.applexPos[xPos]) == snake.snakexLength[0] && (apple.appleyPos[yPos] == snake.snakeyLength[0])) {
+        if (apple.getappleXPos() == snake.snakexLength[0] && (apple.getappleYPos() == snake.snakeyLength[0])) {
             snake.lengthOfSnake++;
             score.increaseScore();
-            xPos = random.nextInt(81);
-            yPos = random.nextInt(69);
+            apple = new Apple();
         }
 
         if (snake.moves != 0) {
-            appleImage.paintIcon(this, g, apple.applexPos[xPos], apple.appleyPos[yPos]);
+            appleImage.paintIcon(this, g, apple.getappleXPos(), apple.getappleYPos());
         }
 
         if (snake.moves == 0) {
@@ -196,7 +194,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        switch (e.getKeyCode()) {
+         switch (e.getKeyCode()) {
             case KeyEvent.VK_SHIFT:
                 if (speedUp.compareAndSet(true, false)) {
                         timer.setDelay(10);
