@@ -89,69 +89,77 @@ public class Snake {
     }
 
     public void movementRight(){
-        for (int i = this.lengthOfSnake - 1; i >= 0; i--) {
-            this.snakeyLength[i + 1] = this.snakeyLength[i];
-        }
-        for (int i = this.lengthOfSnake - 1; i >= 0; i--) {
-            if (i == 0) {
-                this.snakexLength[i] = this.snakexLength[i] + 6;
-            } else {
-                this.snakexLength[i] = this.snakexLength[i - 1];
+        if (this.moves != 0 && !this.death) {
+            for (int i = this.lengthOfSnake - 1; i >= 0; i--) {
+                this.snakeyLength[i + 1] = this.snakeyLength[i];
             }
-            if (this.snakexLength[0] > 524) {
-                this.snakexLength[0] -= 6;
-                dead();
+            for (int i = this.lengthOfSnake - 1; i >= 0; i--) {
+                if (i == 0) {
+                    this.snakexLength[i] = this.snakexLength[i] + 6;
+                } else {
+                    this.snakexLength[i] = this.snakexLength[i - 1];
+                }
+                if (this.snakexLength[0] > 524) {
+                    this.snakexLength[0] -= 6;
+                    dead();
+                }
             }
         }
     }
 
     public void movementLeft(){
-        for (int i = this.lengthOfSnake - 1; i >= 0; i--) {
-            this.snakeyLength[i + 1] = this.snakeyLength[i];
-        }
-        for (int i = this.lengthOfSnake - 1; i >= 0; i--) {
-            if (i == 0) {
-                this.snakexLength[i] = this.snakexLength[i] - 6;
-            } else {
-                this.snakexLength[i] = this.snakexLength[i - 1];
+        if (this.moves != 0 && !this.death) {
+            for (int i = this.lengthOfSnake - 1; i >= 0; i--) {
+                this.snakeyLength[i + 1] = this.snakeyLength[i];
             }
-            if (this.snakexLength[0] < 25) {
-                this.snakexLength[0] += 6;
-                dead();
+            for (int i = this.lengthOfSnake - 1; i >= 0; i--) {
+                if (i == 0) {
+                    this.snakexLength[i] = this.snakexLength[i] - 6;
+                } else {
+                    this.snakexLength[i] = this.snakexLength[i - 1];
+                }
+                if (this.snakexLength[0] < 25) {
+                    this.snakexLength[0] += 6;
+                    dead();
+                }
             }
         }
     }
 
     public void movementUp(){
-        for (int i = this.lengthOfSnake - 1; i >= 0; i--) {
-            this.snakexLength[i + 1] = this.snakexLength[i];
-        }
-        for (int i = this.lengthOfSnake - 1; i >= 0; i--) {
-            if (i == 0) {
-                this.snakeyLength[i] = this.snakeyLength[i] - 6;
-            } else {
-                this.snakeyLength[i] = this.snakeyLength[i - 1];
+        if (this.moves != 0 && !this.death) {
+            for (int i = this.lengthOfSnake - 1; i >= 0; i--) {
+                this.snakexLength[i + 1] = this.snakexLength[i];
             }
-            if (this.snakeyLength[0] < 73) {
-                this.snakeyLength[0] += 6;
-                dead();
+            for (int i = this.lengthOfSnake - 1; i >= 0; i--) {
+                if (i == 0) {
+                    this.snakeyLength[i] = this.snakeyLength[i] - 6;
+                } else {
+                    this.snakeyLength[i] = this.snakeyLength[i - 1];
+                }
+                if (this.snakeyLength[0] < 73) {
+                    this.snakeyLength[0] += 6;
+                    dead();
+                }
             }
         }
     }
 
     public void movementDown(){
-        for (int i = this.lengthOfSnake - 1; i >= 0; i--) {
-            this.snakexLength[i + 1] = this.snakexLength[i];
-        }
-        for (int i = this.lengthOfSnake - 1; i >= 0; i--) {
-            if (i == 0) {
-                this.snakeyLength[i] = this.snakeyLength[i] + 6;
-            } else {
-                this.snakeyLength[i] = this.snakeyLength[i - 1];
+        if (this.moves != 0 && !this.death) {
+            for (int i = this.lengthOfSnake - 1; i >= 0; i--) {
+                this.snakexLength[i + 1] = this.snakexLength[i];
             }
-            if (this.snakeyLength[0] > 568) {
-                this.snakeyLength[0] -= 6;
-                dead();
+            for (int i = this.lengthOfSnake - 1; i >= 0; i--) {
+                if (i == 0) {
+                    this.snakeyLength[i] = this.snakeyLength[i] + 6;
+                } else {
+                    this.snakeyLength[i] = this.snakeyLength[i - 1];
+                }
+                if (this.snakeyLength[0] > 568) {
+                    this.snakeyLength[0] -= 6;
+                    dead();
+                }
             }
         }
     }

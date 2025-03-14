@@ -16,6 +16,7 @@ import java.awt.Font;
 
 public class Gameplay extends JPanel implements KeyListener, ActionListener {
     Snake snake = new Snake();
+    Snake snake2 = new Snake();
 
     Apple[] apples = new Apple[5];
 
@@ -28,6 +29,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     AtomicBoolean speedUp = new AtomicBoolean(true);
 
     private int snakeHeadXPos = 379;
+    private int snake2HeadXPos = 253;
+
 
     private ImageIcon appleImage;
 
@@ -59,6 +62,10 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
                 snake.snakexLength[i] = snakeHeadXPos;
                 snakeHeadXPos -= 6;
                 snake.snakeyLength[i] = 355;
+
+                snake2.snakexLength[i] = snake2HeadXPos;
+                snake2HeadXPos -= 6;
+                snake2.snakeyLength[i] = 355;
             }
         }
 
@@ -107,6 +114,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
         snakeHead = new ImageIcon("images/snakeHead4.png");
         snakeHead.paintIcon(this, g, snake.snakexLength[0], snake.snakeyLength[0]);
+        snakeHead.paintIcon(this, g, snake2.snakexLength[0], snake2.snakeyLength[0]);
 
         for (int i = 0; i < snake.lengthOfSnake; i++) {
             if (i == 0 && (snake.right || snake.left || snake.up || snake.down)) {
@@ -116,6 +124,17 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
             if (i != 0) {
                 snakeBody = new ImageIcon("images/snakeimage4.png");
                 snakeBody.paintIcon(this, g, snake.snakexLength[i], snake.snakeyLength[i]);
+            }
+        }
+
+        for (int i = 0; i < snake2.lengthOfSnake; i++) {
+            if (i == 0) {
+                snakeHead = new ImageIcon("images/snakeHead4.png");
+                snakeHead.paintIcon(this, g, snake2.snakexLength[i], snake2.snakeyLength[i]);
+            }
+            if (i != 0) {
+                snakeBody = new ImageIcon("images/snakeimage4.png");
+                snakeBody.paintIcon(this, g, snake2.snakexLength[i], snake2.snakeyLength[i]);
             }
         }
 
@@ -143,6 +162,12 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         // if snake's head's x and y positions == any other part of the snake, the snake dies 
         for (int i = 1; i < snake.lengthOfSnake; i++) {
             if (snake.snakexLength[i] == snake.snakexLength[0] && snake.snakeyLength[i] == snake.snakeyLength[0]) {
+                snake.dead();
+            }
+        }
+        // if snake's head's x and y positions == any part of another snake, the snake dies 
+        for (int i = 0; i < snake2.lengthOfSnake; i++) {
+            if (snake2.snakexLength[i] == snake.snakexLength[0] && snake2.snakeyLength[i] == snake.snakeyLength[0]) {
                 snake.dead();
             }
         }
@@ -209,6 +234,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
             case KeyEvent.VK_SPACE:
                 if (snake.moves == 0) {
                     snake.moves++;
+                    snake2.moves = 0;
                     snake.right = true;
                 }
                 if (snake.death) {
