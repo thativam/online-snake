@@ -97,14 +97,23 @@ public class Snake {
         this.currentDirection = Direction.NONE;
     }
 
+    private int[] updateArray(int[] arr){
+        int[] temp = new int[750];
+
+        IntStream.range(1, lengthOfSnake + 1)
+        .parallel()
+        .forEach(i -> temp[i] = arr[i - 1]);
+        
+        temp[0] = arr[0];
+        return temp;
+    }
+
     public void movementRight(){
         if (!generalCheck()){
             dead();
         }
         if (this.moves != 0 && !this.death) {
-            for (int i = this.lengthOfSnake - 1; i >= 0; i--) {
-                this.snakeyLength[i + 1] = this.snakeyLength[i];
-            }
+            this.snakeyLength = updateArray(snakeyLength);
             for (int i = this.lengthOfSnake - 1; i >= 0; i--) {
                 if (i == 0) {
                     this.snakexLength[i] = this.snakexLength[i] + SPEED;
@@ -124,9 +133,7 @@ public class Snake {
             dead();
         }
         if (this.moves != 0 && !this.death) {
-            for (int i = this.lengthOfSnake - 1; i >= 0; i--) {
-                this.snakeyLength[i + 1] = this.snakeyLength[i];
-            }
+            this.snakeyLength = updateArray(snakeyLength);
             for (int i = this.lengthOfSnake - 1; i >= 0; i--) {
                 if (i == 0) {
                     this.snakexLength[i] = this.snakexLength[i] - SPEED;
@@ -146,9 +153,7 @@ public class Snake {
             dead();
         }
         if (this.moves != 0 && !this.death) {
-            for (int i = this.lengthOfSnake - 1; i >= 0; i--) {
-                this.snakexLength[i + 1] = this.snakexLength[i];
-            }
+            this.snakexLength = updateArray(snakexLength);
             for (int i = this.lengthOfSnake - 1; i >= 0; i--) {
                 if (i == 0) {
                     this.snakeyLength[i] = this.snakeyLength[i] - SPEED;
@@ -168,9 +173,7 @@ public class Snake {
             dead();
         }
         if (this.moves != 0 && !this.death) {
-            for (int i = this.lengthOfSnake - 1; i >= 0; i--) {
-                this.snakexLength[i + 1] = this.snakexLength[i];
-            }
+            this.snakexLength = updateArray(snakexLength);
             for (int i = this.lengthOfSnake - 1; i >= 0; i--) {
                 if (i == 0) {
                     this.snakeyLength[i] = this.snakeyLength[i] + SPEED;
