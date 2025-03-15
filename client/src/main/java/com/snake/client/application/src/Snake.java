@@ -62,45 +62,32 @@ public class Snake {
 
     public void moveRight(){
         if (this.moves != 0 && !this.death) {
-            this.moves++;
             if (!currentDirection.isOpposite(Direction.RIGHT)) {
-                currentDirection = Direction.RIGHT;
-            } else {
-                currentDirection  = Direction.LEFT;
+                nextDirection = Direction.RIGHT;
             }
         }
     }
 
     public void moveLeft(){
         if (this.moves != 0 && !this.death) {
-            this.moves++;
             if (!currentDirection.isOpposite(Direction.LEFT)) {
-                currentDirection = Direction.LEFT;
-            } else {
-                currentDirection = Direction.RIGHT;
+                nextDirection = Direction.LEFT;
             }
         }
     }
 
     public void moveUp(){
         if (this.moves != 0 && !this.death) {
-            this.moves++;
             if (!currentDirection.isOpposite(Direction.UP)) {
-                currentDirection = Direction.UP;
-            } else {
-                currentDirection = Direction.DOWN;
-
-            }
+                nextDirection = Direction.UP;
+            } 
         }
     }
 
     public void moveDown(){
         if (this.moves != 0 && !this.death) {
-            this.moves++;
             if (!currentDirection.isOpposite(Direction.DOWN)) {
-                currentDirection = Direction.DOWN;
-            } else {
-                currentDirection = Direction.UP;
+                nextDirection = Direction.DOWN;
             }
         }
     }
@@ -227,6 +214,7 @@ public class Snake {
     }
 
     public void restart() {
+        this.nextDirection = Direction.RIGHT;
         this.currentDirection = Direction.RIGHT;
         defaultActions();  
     }
@@ -235,12 +223,13 @@ public class Snake {
         moves++;
     }
     public void restart(Direction direction) {
+        this.nextDirection = direction;
         this.currentDirection = direction;
         defaultActions();
     }
 
     public void reset(){
-        moves=0;
+        moves= 0;
         lengthOfSnake= snakeInitialSize;
         death = false;
     }

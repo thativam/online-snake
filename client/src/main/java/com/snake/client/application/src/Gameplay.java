@@ -18,7 +18,6 @@ import com.snake.client.application.src.Snake.Direction;
 public class Gameplay extends JPanel implements KeyListener, ActionListener {
     private static int delay = 60;
     private int snakeHeadXPos = 379;
-    private int snake2HeadXPos = 253;
 
     Snake snake = new Snake(Direction.RIGHT);
     Snake snake2 = new Snake(Direction.UP);
@@ -185,25 +184,29 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        switch (snake.currentDirection) {
-            case Direction.RIGHT:
-                snake.movementRight();
-                repaint();
-                break;
-            case Direction.LEFT:
-                snake.movementLeft();
-                repaint();
-                break;
-            case Direction.UP:
-                snake.movementUp();
-                repaint();
-                break;
-            case Direction.DOWN:
-                snake.movementDown();
-                repaint();
-                break;
-            case Direction.NONE:
-                break;
+        if (snake.moves > 0 && !snake.death) {
+            snake.currentDirection = snake.nextDirection;
+            switch (snake.currentDirection) {
+                case Direction.RIGHT:
+                    snake.movementRight();
+                    repaint();
+                    break;
+                case Direction.LEFT:
+                    snake.movementLeft();
+                    repaint();
+                    break;
+                case Direction.UP:
+                    snake.movementUp();
+                    repaint();
+                    break;
+                case Direction.DOWN:
+                    snake.movementDown();
+                    repaint();
+                    break;
+                case Direction.NONE:
+                    break;
+            }
+            snake.moves++;
         }
     }
 
