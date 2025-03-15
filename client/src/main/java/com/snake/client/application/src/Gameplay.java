@@ -115,26 +115,9 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         shiftImage.paintIcon(this, g, 685, 625);
         g.drawString("Boost", 770, 640);
 
-        snakeHead.paintIcon(this, g, snake.snakexLength[0], snake.snakeyLength[0]);
-        snakeHead.paintIcon(this, g, snake2.snakexLength[0], snake2.snakeyLength[0]);
 
-        for (int i = 0; i < snake.lengthOfSnake; i++) {
-            if (i == 0 && (snake.currentDirection != Direction.NONE)) {
-                snakeHead.paintIcon(this, g, snake.snakexLength[i], snake.snakeyLength[i]);
-            }
-            if (i != 0) {
-                snakeBody.paintIcon(this, g, snake.snakexLength[i], snake.snakeyLength[i]);
-            }
-        }
+        snake.paintSnake(this, g, snakeHead, snakeBody);
 
-        for (int i = 0; i < snake2.lengthOfSnake; i++) {
-            if (i == 0) {
-                snakeHead.paintIcon(this, g, snake2.snakexLength[i], snake2.snakeyLength[i]);
-            }
-            if (i != 0) {
-                snakeBody.paintIcon(this, g, snake2.snakexLength[i], snake2.snakeyLength[i]);
-            }
-        }
 
         for(int i = 0; i < apples.length ;i++){
             if (apples[i].getappleXPos() == snake.snakexLength[0] && (apples[i].getappleYPos() == snake.snakeyLength[0])) {
@@ -240,33 +223,25 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
                 break;
             case KeyEvent.VK_D:
             case KeyEvent.VK_RIGHT:
-                System.out.println("Right");
                 snake.moveRight();
-                
                 repaint();
                 break;
             case KeyEvent.VK_A:
             case KeyEvent.VK_LEFT:
-                System.out.println("left");
                 snake.moveLeft();
-                
                 repaint();
                 break;
             case KeyEvent.VK_W:
             case KeyEvent.VK_UP:
-                System.out.println("up");
                 snake.moveUp();
-                
                 repaint();
                 break;
             case KeyEvent.VK_S:
             case KeyEvent.VK_DOWN:
-                System.out.println("down");
                 snake.moveDown();
                 repaint();
                 break;
         }
-        System.out.println(" --_--_--_--");;
     }
 
     @Override

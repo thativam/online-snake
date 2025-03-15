@@ -1,7 +1,11 @@
 package com.snake.client.application.src;
 
+import java.awt.Graphics;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.IntStream;
+
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 
 public class Snake {
 
@@ -13,8 +17,6 @@ public class Snake {
                     || this == UP && direction == DOWN || this == DOWN && direction == UP;
         }
     }
-
-
     Direction currentDirection;
 
     Direction nextDirection;
@@ -39,6 +41,12 @@ public class Snake {
         this.moves=0;
     }
 
+    public void paintSnake(JPanel gameFrame, Graphics g, ImageIcon snakeHead, ImageIcon snakeBody) {        
+        snakeHead.paintIcon(gameFrame, g, this.snakexLength[0], this.snakeyLength[0]);
+        IntStream.range(1, this.lengthOfSnake).parallel().forEach(i -> 
+            snakeBody.paintIcon(gameFrame, g, this.snakexLength[i], this.snakeyLength[i])
+        );
+    }
     public Boolean generalCheck(){
         
         // if snake's head's x and y positions == any other part of the snake, the snake dies
