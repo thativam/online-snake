@@ -2,7 +2,6 @@ package com.snake.client.application.src;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -12,11 +11,34 @@ import java.util.List;
 
 import com.snake.client.utils.StringUtils;
 
+/**
+ * The Score class is responsible for managing the player's score and high scores.
+ * It provides functionality to increase, reset, and retrieve the current score,
+ * as well as manage a list of high scores. High scores are currently stored in a file,
+ * but future implementations will read from a database.
+ *
+ * <p>Key Features:
+ * - Tracks the current score of the player.
+ * - Maintains a list of high scores, sorted in descending order.
+ * - Reads high scores from a file during initialization.
+ * - Writes updated high scores to a file after a new score is saved.
+ * - Limits the high score list to a maximum of 10 entries.
+ *
+ * <p>Future Enhancements:
+ * - Replace file-based storage with database integration for high scores.
+ *
+ * <p>Usage:
+ * - Use {@link #increaseScore()} to increment the current score.
+ * - Use {@link #resetScore()} to reset the score to zero.
+ * - Use {@link #getScore()} to retrieve the current score.
+ * - Use {@link #getHighScore()} to retrieve the top 10 high scores as a list.
+ * - Use {@link #saveNewScore()} to save the current score to the high score list.
+ */
 public class Score {
     private int score;
     private List<Integer> highScoreList;
     private String scoreFilePath = "client\\src\\main\\java\\com\\snake\\client\\resources\\highscore.dat";
-    
+    private final int MAX_VALUES = 10;
     public Score(){
         this.score=0;
         this.highScoreList = new ArrayList<Integer>();
@@ -36,22 +58,25 @@ public class Score {
     }
 
     public List<Integer> getHighScore() {
+        highScoreList.sort((a,b)->b-a);
         if(highScoreList.size() == 0){
             readFile();
-            return highScoreList;
+            return highScoreList.subList(0, 10);
         }
-        return highScoreList;
+        return highScoreList.subList(0, 10);
     }
 
     public String getHighscore(){
         highScoreList.sort((a,b)->b-a);
         if(highScoreList.size() == 0){
             readFile();
-            return StringUtils.stringFormat(highScoreList);
+            return StringUtils.stringFormat(highScoreList.subList(0, 10));
         }
-        return StringUtils.stringFormat(highScoreList);
+        return StringUtils.stringFormat(highScoreList.subList(0, 10));
     }
 
+
+    // TODO: Implement database integration for high scores
     private void readFile(){
         FileReader readFile = null;
         BufferedReader reader = null;
@@ -63,17 +88,19 @@ public class Score {
             highScoreList.add(Integer.parseInt(line));
             String allLines = line;
 
-            while (line != null) {
+            int i =1;
+            while (line != null && i<MAX_VALUES) {
                 line = reader.readLine();
                 
                 if (line == null)
                     break;
                 highScoreList.add(Integer.parseInt(line));
                 allLines = allLines.concat("\n" + line);
+                i++;
             }
-
         }
         catch (Exception e) {
+            highScoreList = new ArrayList<Integer>(Collections.nCopies(MAX_VALUES, 0));
             System.out.println("there was a problem reading the file"+ e);
         } finally {
             try {
@@ -86,26 +113,23 @@ public class Score {
         }
     }
 
-    public void writeFile() {
+    // TODO: Implement database integration for high scores
+    private void writeFile() {
         
         FileWriter writeFile = null;
         BufferedWriter writer = null;
-        List<Integer> list = new ArrayList<Integer>();
         try {
-            
-
-            writeFile = new FileWriter("client\\src\\main\\java\\com\\snake\\client\\resources\\highscore.dat");
+            writeFile = new FileWriter(scoreFilePath);
             writer = new BufferedWriter(writeFile);
 
-            int size = list.size();
+            int size = highScoreList.size();
 
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < MAX_VALUES; i++) {
                 if (i > size - 1) {
                     String def = "0";
                     writer.write(def);
                 } else { 
-                    String str = String.valueOf(list.get(i));
-                    writer.write(str);
+                    writer.write(String.valueOf(highScoreList.get(i)));
                 }
                 if (i < 9) {
                     writer.newLine();
@@ -126,43 +150,8 @@ public class Score {
     }
 
     public void saveNewScore() {
-        String newScore = String.valueOf(this.getScore());
-
-        // Buat file untuk simpan highscorenya
-        File scoreFile = new File("client\\src\\main\\java\\com\\snake\\client\\resources\\highscore.dat");
-
-        // Jika file highscore.datnya tidak ada
-        if (!scoreFile.exists()) {
-            try {
-                // Buat file baru
-                scoreFile.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        FileWriter writeFile = null;
-        BufferedWriter writer = null;
-
-        try {
-            writeFile = new FileWriter(scoreFile, true);
-            writer = new BufferedWriter(writeFile);
-            writer.write(newScore);
-        } catch (Exception e) {
-            return;
-        } finally {
-            try {
-                if (writer != null)
-                    writer.close();
-            } catch (Exception e) {
-                return;
-            }
-        }
-
-    }
-
-    public static void main(String[] args){
-        Score score = new Score();
-        System.out.println(score.getHighScore());
+        highScoreList.add(this.getScore());
+        highScoreList.sort((a,b)->b-a);
+        writeFile();
     }
 }
