@@ -30,7 +30,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
 
     private Timer timer;
-    
+    private boolean started = false;
 
     AtomicBoolean speedUp = new AtomicBoolean(true);
 
@@ -64,12 +64,11 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     }
 
     public void paint(Graphics g) {
-        if (snake.moves == 0) {
+        if (snake.moves == 0 && started == false) {
             snakeHeadXPos = snake.start(snakeHeadXPos);
+            started = true;
         }
-        if (snake2.moves == 0) {
-            snake2HeadXPos = snake2.start(snake2HeadXPos);
-        }
+
 
         g.setColor(Color.WHITE);
         g.drawRect(24, 10, 852, 55);
@@ -232,6 +231,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
                     score.resetScore();
                     snake.reset();
                     snake2.reset();
+                    started = false;
                     repaint();
                 }
                 break;
