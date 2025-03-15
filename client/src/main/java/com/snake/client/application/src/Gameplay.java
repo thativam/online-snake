@@ -13,13 +13,15 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import com.snake.client.application.src.Snake.Direction;
+
 public class Gameplay extends JPanel implements KeyListener, ActionListener {
     private static int delay = 60;
     private int snakeHeadXPos = 379;
     private int snake2HeadXPos = 253;
 
-    Snake snake = new Snake();
-    Snake snake2 = new Snake();
+    Snake snake = new Snake(Direction.RIGHT);
+    Snake snake2 = new Snake(Direction.UP);
     Score score = new Score();
     
     private String highScore;
@@ -49,7 +51,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         setFocusTraversalKeysEnabled(false);
         loadImages();
         timer = new Timer(delay, this);
-        timer.start();
+        
     }
 
     private void loadImages(){
@@ -119,7 +121,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         snakeHead.paintIcon(this, g, snake2.snakexLength[0], snake2.snakeyLength[0]);
 
         for (int i = 0; i < snake.lengthOfSnake; i++) {
-            if (i == 0 && (snake.right || snake.left || snake.up || snake.down)) {
+            if (i == 0 && (snake.currentDirection != Direction.NONE)) {
                 snakeHead.paintIcon(this, g, snake.snakexLength[i], snake.snakeyLength[i]);
             }
             if (i != 0) {
@@ -184,23 +186,25 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        timer.start();
-        
-        if (snake.right) {
-            snake.movementRight();
-            repaint();
-        }
-        if (snake.left) {
-            snake.movementLeft();
-            repaint();
-        }
-        if (snake.up) {
-            snake.movementUp();
-            repaint();
-        }
-        if (snake.down) {
-            snake.movementDown();
-            repaint();
+        switch (snake.currentDirection) {
+            case Direction.RIGHT:
+                snake.movementRight();
+                repaint();
+                break;
+            case Direction.LEFT:
+                snake.movementLeft();
+                repaint();
+                break;
+            case Direction.UP:
+                snake.movementUp();
+                repaint();
+                break;
+            case Direction.DOWN:
+                snake.movementDown();
+                repaint();
+                break;
+            case Direction.NONE:
+                break;
         }
     }
 
@@ -219,40 +223,43 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
                 break;
             case KeyEvent.VK_SPACE:
                 if (snake.moves == 0) {
-                    snake.moves++;
-                    snake2.moves = 0;
-                    snake.right = true;
+                    snake.restart();
+                    snake2.restart();
+                    timer.start();
                 }
                 if (snake.death) {
-                    snake.moves = 0;
-                    snake.lengthOfSnake = Snake.snakeInitialSize;
+                    
                     score.resetScore();
-                    snake.death = false;
+                    snake.reset();
+                    snake2.reset();
                     repaint();
                 }
                 break;
+            case KeyEvent.VK_D:
             case KeyEvent.VK_RIGHT:
                 System.out.println("Right");
                 snake.moveRight();
-                snake.movementRight();
+                
                 repaint();
                 break;
+            case KeyEvent.VK_A:
             case KeyEvent.VK_LEFT:
                 System.out.println("left");
                 snake.moveLeft();
-                snake.movementLeft();
+                
                 repaint();
                 break;
+            case KeyEvent.VK_W:
             case KeyEvent.VK_UP:
                 System.out.println("up");
                 snake.moveUp();
-                snake.movementUp();
+                
                 repaint();
                 break;
+            case KeyEvent.VK_S:
             case KeyEvent.VK_DOWN:
                 System.out.println("down");
                 snake.moveDown();
-                snake.movementDown();
                 repaint();
                 break;
         }

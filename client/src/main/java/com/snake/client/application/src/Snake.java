@@ -5,9 +5,19 @@ import java.util.stream.IntStream;
 
 public class Snake {
 
-    
+    enum Direction {
+        LEFT, RIGHT, UP, DOWN, NONE;
+
+        public boolean isOpposite(Direction direction) {
+            return this == LEFT && direction == RIGHT || this == RIGHT && direction == LEFT
+                    || this == UP && direction == DOWN || this == DOWN && direction == UP;
+        }
+    }
 
 
+    Direction currentDirection;
+
+    Direction nextDirection;
 
     int[] snakexLength = new int[750];
     int[] snakeyLength = new int[750];
@@ -16,21 +26,19 @@ public class Snake {
     int moves;
     final static int SPEED = 6;
 
-    boolean left;
-    boolean right;
-    boolean up;
-    boolean down;
     boolean death;
 
-    public Snake(){
-        this.left=false;
-        this.right=false;
-        this.up=false;
-        this.down=false;
+
+
+
+    public Snake(Direction currentDirection) {
+        this.currentDirection = currentDirection; // or any initial direction
+        this.nextDirection = currentDirection;
         this.death=false;
         this.lengthOfSnake=5;
         this.moves=0;
     }
+
     public Boolean generalCheck(){
         
         // if snake's head's x and y positions == any other part of the snake, the snake dies
@@ -53,67 +61,53 @@ public class Snake {
     }
 
     public void moveRight(){
-        if (!this.left && this.moves != 0 && !this.death) {
-                this.moves++;
-                if (!this.left) {
-                    this.right = true;
-                } else {
-                    this.right = false;
-                    this.left = true;
-                }
-                this.up = false;
-                this.down = false;
+        if (this.moves != 0 && !this.death) {
+            this.moves++;
+            if (!currentDirection.isOpposite(Direction.RIGHT)) {
+                currentDirection = Direction.RIGHT;
+            } else {
+                currentDirection  = Direction.LEFT;
+            }
         }
     }
 
     public void moveLeft(){
-        if (!this.right && this.moves != 0 && !this.death) {
+        if (this.moves != 0 && !this.death) {
             this.moves++;
-            if (!this.right) {
-                this.left = true;
+            if (!currentDirection.isOpposite(Direction.LEFT)) {
+                currentDirection = Direction.LEFT;
             } else {
-                this.left = false;
-                this.right = true;
+                currentDirection = Direction.RIGHT;
             }
-            this.up = false;
-            this.down = false;
         }
     }
 
     public void moveUp(){
-        if (!this.down && this.moves != 0 && !this.death) {
+        if (this.moves != 0 && !this.death) {
             this.moves++;
-            if (!this.down) {
-                this.up = true;
+            if (!currentDirection.isOpposite(Direction.UP)) {
+                currentDirection = Direction.UP;
             } else {
-                this.up = false;
-                this.down = true;
+                currentDirection = Direction.DOWN;
+
             }
-            this.left = false;
-            this.right = false;
         }
     }
 
     public void moveDown(){
-        if (!this.up && this.moves != 0 && !this.death) {
+        if (this.moves != 0 && !this.death) {
             this.moves++;
-            if (!this.up) {
-                this.down = true;
+            if (!currentDirection.isOpposite(Direction.DOWN)) {
+                currentDirection = Direction.DOWN;
             } else {
-                this.down = false;
-                this.up = true;
+                currentDirection = Direction.UP;
             }
-            this.left = false;
-            this.right = false;
         }
     }
 
     public void dead() {
-        this.right = false;
-        this.left = false;
-        this.up = false;
-        this.down = false;
         this.death = true;
+        this.currentDirection = Direction.NONE;
     }
 
     public void movementRight(){
@@ -204,4 +198,50 @@ public class Snake {
         }
     }
 
+    public void setNextDirection(Direction nxt) {
+        this.currentDirection = nxt;
+    }
+
+    public void updateDirection() {
+        this.currentDirection = this.nextDirection;
+    }
+
+    public void move() {
+        // move head according to current direction
+        switch (currentDirection) {
+            case RIGHT:
+                movementRight();
+                break;
+            case LEFT:
+                movementLeft();
+                break;
+            case UP:
+                movementUp();
+                break;
+            case DOWN:
+                movementDown();
+                break;
+            case NONE:
+                break;
+        }
+    }
+
+    public void restart() {
+        this.currentDirection = Direction.RIGHT;
+        defaultActions();  
+    }
+
+    private void defaultActions(){
+        moves++;
+    }
+    public void restart(Direction direction) {
+        this.currentDirection = direction;
+        defaultActions();
+    }
+
+    public void reset(){
+        moves=0;
+        lengthOfSnake= snakeInitialSize;
+        death = false;
+    }
 }
