@@ -103,7 +103,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         g.setColor(Color.WHITE);
         g.drawRect(gameX, gameY, gameWidth, gameHeight);
 
-        // Internal Panel (where the snake is going to move)
+        // Internal Panel (where the snakes[0] is going to move)
         g.setColor(Color.black);
         g.fillRect(gameX + 1, gameY + 1, gameWidth - 1, gameHeight - 1);
 
