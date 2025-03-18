@@ -21,10 +21,10 @@ public class Snake {
                     || this == UP && direction == DOWN || this == DOWN && direction == UP;
         }
     }
-
     Direction currentDirection;
     Direction nextDirection;
-
+    int startingHeadPositionX;
+    int startingHeadPositionY;
     int[] snakexLength = new int[750];
     int[] snakeyLength = new int[750];
 
@@ -41,8 +41,17 @@ public class Snake {
     int lengthOfSnake;
     int moves;
     final static int SPEED = 6;
-
     boolean death;
+
+    public Snake(Direction currentDirection, int startingHeadPositionX, int startingHeadPositionY) {
+        this.startingHeadPositionX = startingHeadPositionX;
+        this.startingHeadPositionY = startingHeadPositionY;
+        this.currentDirection = currentDirection; // or any initial direction
+        this.nextDirection = currentDirection;
+        this.death = false;
+        this.lengthOfSnake = 5;
+        this.moves = 0;
+    }
 
     public void increaseSnakeSize() {
         this.lengthOfSnake++;
@@ -50,14 +59,6 @@ public class Snake {
 
     public void increaseMoves() {
         this.moves++;
-    }
-
-    public Snake(Direction currentDirection) {
-        this.currentDirection = currentDirection; // or any initial direction
-        this.nextDirection = currentDirection;
-        this.death = false;
-        this.lengthOfSnake = 5;
-        this.moves = 0;
     }
 
     public void setCurrentDirection() {
@@ -83,13 +84,13 @@ public class Snake {
         return flag.get();
     }
 
-    public int start(int snakeHeadXPos) {
+    public void start(){
         for (int i = 0; i < snakeInitialSize; i++) {
-            this.snakexLength[i] = snakeHeadXPos;
-            snakeHeadXPos -= SPEED;
-            this.snakeyLength[i] = 355;
+            this.snakexLength[i] = this.startingHeadPositionX;
+            this.startingHeadPositionX -= SPEED;
+            this.snakeyLength[i] = this.startingHeadPositionY;
         }
-        return snakeHeadXPos;
+        //return this.startingHeadPositionX;
     }
 
     public void moveRight() {
