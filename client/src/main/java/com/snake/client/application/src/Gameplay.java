@@ -17,10 +17,9 @@ import com.snake.client.application.src.Snake.Direction;
 
 public class Gameplay extends JPanel implements KeyListener, ActionListener {
     private static int delay = 60;
-    private int snakeHeadXPos = 379;
+    private static int numberPlayers = 2;
+    Snake[] snakes = new Snake[4];
 
-    Snake snake = new Snake(Direction.RIGHT);
-    Snake snake2 = new Snake(Direction.UP);
     Score score = new Score();
     
     private String highScore;
@@ -42,6 +41,9 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
 
     public Gameplay() {
+        for(int i = 0; i < numberPlayers ;i++){
+            snakes[i] = new Snake(Direction.RIGHT, 379, 253);
+        }
         for(int i = 0; i < apples.length; i++) {
             apples[i] = new Apple(); // Criando cada instância
         }
@@ -63,8 +65,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     }
 
     public void paint(Graphics g) {
-        if (snake.moves == 0 && started == false) {
-            snakeHeadXPos = snake.start(snakeHeadXPos);
+        if (snakes[0].moves == 0 && started == false) {
+            snakes[0].start();
             started = true;
         }
 
@@ -79,7 +81,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         g.setColor(Color.WHITE);
         g.drawRect(24, 71, 506, 501);
 
-        // Internal Panel (where the snake is going to move)
+        // Internal Panel (where the snakes[0] is going to move)
         g.setColor(Color.black);
         g.fillRect(25, 72, 505, 500);
 
@@ -104,8 +106,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
         g.drawRect(653, 490, 221, 1);
         g.setFont(new Font("Helvetica", Font.BOLD, 15));
-        g.drawString("Posição Maçã: " + apples[0].printPosition(), 665, 510);
-        g.drawString("Posição cobra: X: " + snake.snakexLength[0] + " Y: "+ snake.snakeyLength[0], 665, 530);
+        g.drawString("Posição cobra: X: " + snakes[0].snakexLength[0] + " Y: "+ snakes[0].snakeyLength[0], 665, 530);
        
 
         arrowImage.paintIcon(this, g, 660, 550);
@@ -116,24 +117,25 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         g.drawString("Boost", 770, 640);
 
 
-        snake.paintSnake(this, g, snakeHead, snakeBody);
+        snakes[0].paintSnake(this, g, snakeHead, snakeBody);
+
 
 
         for(int i = 0; i < apples.length ;i++){
-            if (apples[i].getappleXPos() == snake.snakexLength[0] && (apples[i].getappleYPos() == snake.snakeyLength[0])) {
-                snake.lengthOfSnake++;
+            if (apples[i].getappleXPos() == snakes[0].snakexLength[0] && (apples[i].getappleYPos() == snakes[0].snakeyLength[0])) {
+                snakes[0].lengthOfSnake++;
                 score.increaseScore();
                 apples[i] = new Apple();
             }
         }
 
-        if (snake.moves != 0) {
+        if (snakes[0].moves != 0) {
             for(int i = 0; i < apples.length; i++) {
                 appleImage.paintIcon(this, g, apples[i].getappleXPos(), apples[i].getappleYPos());
             }
         }
 
-        if (snake.moves == 0) {
+        if (snakes[0].moves == 0) {
             g.setColor(Color.WHITE);
             g.setFont(new Font("Courier New", Font.BOLD, 20));
             g.drawString("Press Spacebar to Start the Game!", 70, 300);
@@ -141,8 +143,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
         
 
-        // protocols made when the snake dies
-        if (snake.death) {
+        // protocols made when the snakes[0] dies
+        if (snakes[0].death) {
             score.saveNewScore();
 
             g.setColor(Color.RED);
@@ -167,29 +169,29 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (snake.moves > 0 && !snake.death) {
-            snake.currentDirection = snake.nextDirection;
-            switch (snake.currentDirection) {
+        if (snakes[0].moves > 0 && !snakes[0].death) {
+            snakes[0].currentDirection = snakes[0].nextDirection;
+            switch (snakes[0].currentDirection) {
                 case Direction.RIGHT:
-                    snake.movementRight();
+                    snakes[0].movementRight();
                     repaint();
                     break;
                 case Direction.LEFT:
-                    snake.movementLeft();
+                    snakes[0].movementLeft();
                     repaint();
                     break;
                 case Direction.UP:
-                    snake.movementUp();
+                    snakes[0].movementUp();
                     repaint();
                     break;
                 case Direction.DOWN:
-                    snake.movementDown();
+                    snakes[0].movementDown();
                     repaint();
                     break;
                 case Direction.NONE:
                     break;
             }
-            snake.moves++;
+            snakes[0].moves++;
         }
     }
 
@@ -207,38 +209,36 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
                 }
                 break;
             case KeyEvent.VK_SPACE:
-                if (snake.moves == 0) {
-                    snake.restart();
-                    snake2.restart();
+                if (snakes[0].moves == 0) {
+                    snakes[0].restart();
                     timer.start();
                 }
-                if (snake.death) {
+                if (snakes[0].death) {
                     
                     score.resetScore();
-                    snake.reset();
-                    snake2.reset();
+                    snakes[0].reset();
                     started = false;
                     repaint();
                 }
                 break;
             case KeyEvent.VK_D:
             case KeyEvent.VK_RIGHT:
-                snake.moveRight();
+                snakes[0].moveRight();
                 repaint();
                 break;
             case KeyEvent.VK_A:
             case KeyEvent.VK_LEFT:
-                snake.moveLeft();
+                snakes[0].moveLeft();
                 repaint();
                 break;
             case KeyEvent.VK_W:
             case KeyEvent.VK_UP:
-                snake.moveUp();
+                snakes[0].moveUp();
                 repaint();
                 break;
             case KeyEvent.VK_S:
             case KeyEvent.VK_DOWN:
-                snake.moveDown();
+                snakes[0].moveDown();
                 repaint();
                 break;
         }

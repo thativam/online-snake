@@ -18,22 +18,20 @@ public class Snake {
         }
     }
     Direction currentDirection;
-
     Direction nextDirection;
-
+    int startingHeadPositionX;
+    int startingHeadPositionY;
     int[] snakexLength = new int[750];
     int[] snakeyLength = new int[750];
     static int snakeInitialSize = 5;
     int lengthOfSnake;
     int moves;
     final static int SPEED = 6;
-
     boolean death;
 
-
-
-
-    public Snake(Direction currentDirection) {
+    public Snake(Direction currentDirection, int startingHeadPositionX, int startingHeadPositionY) {
+        this.startingHeadPositionX = startingHeadPositionX;
+        this.startingHeadPositionY = startingHeadPositionY;
         this.currentDirection = currentDirection; // or any initial direction
         this.nextDirection = currentDirection;
         this.death=false;
@@ -59,13 +57,13 @@ public class Snake {
         return flag.get();
     }
 
-    public int start(int snakeHeadXPos){
+    public void start(){
         for (int i = 0; i < snakeInitialSize; i++) {
-            this.snakexLength[i] = snakeHeadXPos;
-            snakeHeadXPos -= SPEED;
-            this.snakeyLength[i] = 355;
+            this.snakexLength[i] = this.startingHeadPositionX;
+            this.startingHeadPositionX -= SPEED;
+            this.snakeyLength[i] = this.startingHeadPositionY;
         }
-        return snakeHeadXPos;
+        //return this.startingHeadPositionX;
     }
 
     public void moveRight(){
