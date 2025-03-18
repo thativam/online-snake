@@ -46,7 +46,6 @@ public class Snake {
         );
     }
     public Boolean generalCheck(){
-        
         // if snake's head's x and y positions == any other part of the snake, the snake dies
         AtomicBoolean flag = new AtomicBoolean(true);
         IntStream.range(1, this.lengthOfSnake).parallel().forEach(i -> {
@@ -60,10 +59,14 @@ public class Snake {
     public void start(){
         for (int i = 0; i < snakeInitialSize; i++) {
             this.snakexLength[i] = this.startingHeadPositionX;
-            this.startingHeadPositionX -= SPEED;
+            if(this.currentDirection == Direction.RIGHT)
+                this.startingHeadPositionX -= SPEED;
+            else if(this.currentDirection == Direction.LEFT)
+                this.startingHeadPositionX += SPEED;
+            else
+                this.startingHeadPositionX -= SPEED;
             this.snakeyLength[i] = this.startingHeadPositionY;
         }
-        //return this.startingHeadPositionX;
     }
 
     public void moveRight(){
@@ -222,15 +225,10 @@ public class Snake {
         }
     }
 
-    public void restart() {
-        this.nextDirection = Direction.RIGHT;
-        this.currentDirection = Direction.RIGHT;
-        defaultActions();  
-    }
-
     private void defaultActions(){
         moves++;
     }
+    
     public void restart(Direction direction) {
         this.nextDirection = direction;
         this.currentDirection = direction;

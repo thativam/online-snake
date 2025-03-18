@@ -17,9 +17,8 @@ import com.snake.client.application.src.Snake.Direction;
 
 public class Gameplay extends JPanel implements KeyListener, ActionListener {
     private static int delay = 60;
-    private static int numberPlayers = 2;
     Snake[] snakes = new Snake[4];
-
+    Direction startingDirection = Direction.LEFT;
     Score score = new Score();
     
     private String highScore;
@@ -41,8 +40,11 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
 
     public Gameplay() {
-        for(int i = 0; i < numberPlayers ;i++){
-            snakes[i] = new Snake(Direction.RIGHT, 379, 253);
+       /*  for(int i = 0; i < snakes.length ;i++){
+            snakes[i] = new Snake(Direction.RIGHT, i*180+199, 253);
+        }*/
+        for(int i = 0; i < snakes.length; i++) {
+            snakes[i] = new Snake(startingDirection, (i*180 + 199) ,253); // Criando cada instância
         }
         for(int i = 0; i < apples.length; i++) {
             apples[i] = new Apple(); // Criando cada instância
@@ -65,15 +67,15 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     }
 
     public void paint(Graphics g) {
-        if (snakes[0].moves == 0 && started == false) {
-            snakes[0].start();
-            started = true;
+        for(int i = 0; i < snakes.length ;i++){
+            if (snakes[i].moves == 0 && started == false) {
+                snakes[i].start();
+                started = true;
+            }
         }
-
 
         g.setColor(Color.WHITE);
         g.drawRect(24, 10, 852, 55);
-
         
         titleImage.paintIcon(this, g, 25, 11);
 
@@ -81,7 +83,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         g.setColor(Color.WHITE);
         g.drawRect(24, 71, 506, 501);
 
-        // Internal Panel (where the snakes[0] is going to move)
+        // Internal Panel (where the snake is going to move)
         g.setColor(Color.black);
         g.fillRect(25, 72, 505, 500);
 
@@ -106,8 +108,6 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
         g.drawRect(653, 490, 221, 1);
         g.setFont(new Font("Helvetica", Font.BOLD, 15));
-        g.drawString("Posição cobra: X: " + snakes[0].snakexLength[0] + " Y: "+ snakes[0].snakeyLength[0], 665, 530);
-       
 
         arrowImage.paintIcon(this, g, 660, 550);
         g.setFont(new Font("Helvetica", Font.PLAIN, 16));
@@ -116,10 +116,9 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         shiftImage.paintIcon(this, g, 685, 625);
         g.drawString("Boost", 770, 640);
 
-
-        snakes[0].paintSnake(this, g, snakeHead, snakeBody);
-
-
+        for(int i = 0; i < snakes.length ;i++){
+            snakes[i].paintSnake(this, g, snakeHead, snakeBody);
+        }
 
         for(int i = 0; i < apples.length ;i++){
             if (apples[i].getappleXPos() == snakes[0].snakexLength[0] && (apples[i].getappleYPos() == snakes[0].snakeyLength[0])) {
@@ -140,8 +139,6 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
             g.setFont(new Font("Courier New", Font.BOLD, 20));
             g.drawString("Press Spacebar to Start the Game!", 70, 300);
         }
-
-        
 
         // protocols made when the snakes[0] dies
         if (snakes[0].death) {
@@ -210,7 +207,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
                 break;
             case KeyEvent.VK_SPACE:
                 if (snakes[0].moves == 0) {
-                    snakes[0].restart();
+                    snakes[0].restart(startingDirection);
                     timer.start();
                 }
                 if (snakes[0].death) {
