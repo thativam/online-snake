@@ -28,6 +28,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     Snake[] snakes = new Snake[4];
     Score score = new Score();
 
+    Direction startingDirection = Direction.LEFT;
+    
     private String highScore;
     Apple[] apples = new Apple[5];
 
@@ -82,9 +84,11 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     }
 
     public void paint(Graphics g) {
-        if (snakes[0].getMoves() == 0 && started == false) {
-            snakes[0].start();
-            started = true;
+        for(int i = 0; i < snakes.length ;i++){
+            if (snakes[i].getMoves() == 0 && started == false) {
+                snakes[i].start();
+                started = true;
+            }
         }
         int gameX = 24;
         int gameY = 71;
@@ -96,17 +100,13 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         g.setColor(Color.WHITE);
         g.drawRect(gameX, gameY, gameWidth, gameHeight);
 
-        // Internal Panel (where the snakes[0] is going to move)
+        // Internal Panel (where the snake is going to move)
         g.setColor(Color.black);
         g.fillRect(25, 72, 505, 500);
 
-        // Game Border for the score
-        g.setColor(Color.WHITE);
-        g.drawRect(653, 71, 223, 614);
-
-        // Internal Panel (where the score is going to be displayed)
-        g.setColor(Color.black);
-        g.fillRect(654, 72, 221, 613);
+        for(int i = 0; i < snakes.length ;i++){
+            snakes[i].paintSnake(this, g, snakeHead, snakeBody);
+        }
 
         // Rectangle inside the score panel
         g.setColor(Color.white);
@@ -167,8 +167,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
                 appleImage.paintIcon(this, g, apples[i].getappleXPos(), apples[i].getappleYPos());
             }
         }
-   
-        if (snakes[playerId].moves == 0) {
+
+        if (snakes[0].getMoves() == 0) {
             g.setColor(Color.WHITE);
             g.setFont(new Font("Courier New", Font.BOLD, 20));
             g.drawString("Press Spacebar to Start the Game!", 70, 300);
