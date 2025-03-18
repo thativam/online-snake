@@ -23,7 +23,6 @@ import com.snake.client.domain.aplication.Snake.Direction;
 
 public class Gameplay extends JPanel implements KeyListener, ActionListener {
     private static int delay = 60;
-    private static int numberPlayers = 2;
     Snake[] snakes = new Snake[4];
 
     private static final int GAME_WIDTH = 535; // 505 + 30 for borders
@@ -32,6 +31,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     private List<SubscriberData> subscribers = new ArrayList<>();
     private Score score;
 
+    Direction startingDirection = Direction.LEFT;
+    
     private String highScore;
     Apple[] apples = new Apple[5];
 
@@ -49,8 +50,11 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
 
     public Gameplay(Score score) {
-        for(int i = 0; i < numberPlayers ;i++){
-            snakes[i] = new Snake(Direction.RIGHT, 379, 253);
+       /*  for(int i = 0; i < snakes.length ;i++){
+            snakes[i] = new Snake(Direction.RIGHT, i*180+199, 253);
+        }*/
+        for(int i = 0; i < snakes.length; i++) {
+            snakes[i] = new Snake(startingDirection, (i*180 + 199) ,253); // Criando cada instância
         }
         for(int i = 0; i < apples.length; i++) {
             apples[i] = new Apple(); // Criando cada instância
@@ -72,9 +76,11 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     }
 
     public void paint(Graphics g) {
-        if (snakes[0].getMoves() == 0 && started == false) {
-            snakes[0].start();
-            started = true;
+        for(int i = 0; i < snakes.length ;i++){
+            if (snakes[i].getMoves() == 0 && started == false) {
+                snakes[i].start();
+                started = true;
+            }
         }
         int gameX = 24;
         int gameY = 71;
@@ -86,12 +92,13 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         g.setColor(Color.WHITE);
         g.drawRect(gameX, gameY, gameWidth, gameHeight);
 
-        // Internal Panel (where the snakes[0] is going to move)
+        // Internal Panel (where the snake is going to move)
         g.setColor(Color.black);
         g.fillRect(gameX + 1, gameY + 1, gameWidth - 1, gameHeight - 1);
 
-        snakes[0].paintSnake(this, g, snakeHead, snakeBody);
-
+        for(int i = 0; i < snakes.length ;i++){
+            snakes[i].paintSnake(this, g, snakeHead, snakeBody);
+        }
 
 
         for(int i = 0; i < apples.length ;i++){
@@ -108,13 +115,13 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
             }
         }
 
-        if (snake[0].getMoves() == 0) {
+        if (snakes[0].getMoves() == 0) {
             g.setColor(Color.WHITE);
             g.setFont(new Font("Courier New", Font.BOLD, 20));
             g.drawString("Press Spacebar to Start the Game!", 70, 300);
         }
 
-        if (snake[0].isDeath()) {
+        if (snakes[0].isDeath()) {
             notifySubscribers(GameEvents.SNAKE_DEAD);
             g.setColor(Color.RED);
             g.setFont(new Font("Courier New", Font.BOLD, 50));
@@ -195,7 +202,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
                 break;
             case KeyEvent.VK_SPACE:
                 if (snakes[0].getMoves() == 0) {
-                    snakes[0].restart();
+                    snakes[0].restart(startingDirection);
                     timer.start();
                 }
                 if (snakes[0].isDeath()) {
