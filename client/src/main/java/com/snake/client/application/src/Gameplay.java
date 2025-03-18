@@ -28,8 +28,11 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     Snake[] snakes = new Snake[4];
     Score score = new Score();
 
-    final static String imageBasePath = "client/src/main/java/com/snake/client/resources/gameImages/" + "";
+    private String highScore;
     Apple[] apples = new Apple[5];
+
+
+    final static String imageBasePath = "client/src/main/java/com/snake/client/resources/gameImages/" + "";
 
     private Timer timer;
 
@@ -79,8 +82,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     }
 
     public void paint(Graphics g) {
-        if (snake.getMoves() == 0 && started == false) {
-            snakeHeadXPos = snake.start(snakeHeadXPos);
+        if (snakes[0].getMoves() == 0 && started == false) {
+            snakes[0].start();
             started = true;
         }
         int gameX = 24;
@@ -93,7 +96,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         g.setColor(Color.WHITE);
         g.drawRect(gameX, gameY, gameWidth, gameHeight);
 
-        // Internal Panel (where the snake is going to move)
+        // Internal Panel (where the snakes[0] is going to move)
         g.setColor(Color.black);
         g.fillRect(25, 72, 505, 500);
 
