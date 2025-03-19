@@ -88,11 +88,23 @@ public class Snake {
 
     public void start(){
         for (int i = 0; i < snakeInitialSize; i++) {
-            if(startingDirection == Direction.LEFT)
+            if(startingDirection == Direction.LEFT){
                 this.snakexLength[i] = this.startingHeadPositionX + (i * SPEED);
-            else
+                this.snakeyLength[i] = this.startingHeadPositionY;
+            }
+            else if(startingDirection == Direction.RIGHT){
                 this.snakexLength[i] = this.startingHeadPositionX - (i * SPEED);
-            this.snakeyLength[i] = this.startingHeadPositionY; 
+                this.snakeyLength[i] = this.startingHeadPositionY; 
+            }
+            else if(startingDirection == Direction.UP){
+                this.snakexLength[i] = this.startingHeadPositionX;
+                this.snakeyLength[i] = this.startingHeadPositionY + (i * SPEED); 
+            }
+            else{
+                this.snakexLength[i] = this.startingHeadPositionX;
+                this.snakeyLength[i] = this.startingHeadPositionY - (i * SPEED); 
+            }
+
         }
     }
 
