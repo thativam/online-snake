@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.IntStream;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -17,16 +18,15 @@ import com.snake.client.application.src.Snake.Direction;
 
 public class Gameplay extends JPanel implements KeyListener, ActionListener {
     private static int delay = 60;
+    private static int playerId = 1;
     Snake[] snakes = new Snake[2];
     Score score = new Score();
     
     private String highScore;
     final static String imageBasePath = "client\\src\\main\\java\\com\\snake\\client\\resources\\gameImages\\" + ""; 
-    Apple[] apples = new Apple[5];
-
+    Apple[] apples = new Apple[10];
 
     private Timer timer;
-    private boolean started = false;
 
     AtomicBoolean speedUp = new AtomicBoolean(true);
 
@@ -108,40 +108,56 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         g.drawString("Boost", 770, 640);
 
         for(int i = 0; i < snakes.length ;i++){
-            if (snakes[0].moves == 0) {
+            if (snakes[i].moves == 0) {
                 snakes[i].start();
             }
             snakes[i].paintSnake(this, g, snakeHead, snakeBody);
         }
-
+         
         for(int i = 0; i < apples.length ;i++){
-            if (apples[i].getappleXPos() == snakes[0].snakexLength[0] && (apples[i].getappleYPos() == snakes[0].snakeyLength[0])) {
-                snakes[0].lengthOfSnake++;
+            if (apples[i].getappleXPos() == snakes[playerId].snakexLength[0] && (apples[i].getappleYPos() == snakes[playerId].snakeyLength[0])) {
+                snakes[playerId].lengthOfSnake++;
                 score.increaseScore();
                 apples[i] = new Apple();
             }
         }
-
-        if (snakes[0].moves != 0) {
+        
+        //check if player snake has hit any part of another snake
+        for (int j = 0; j < snakes.length; j++) {
+            final int snakeId = j;
+            AtomicBoolean flag = new AtomicBoolean(true);  
+            IntStream.range(1, snakes[snakeId].lengthOfSnake).parallel().forEach(i -> {
+                if (snakes[snakeId].snakexLength[i] == snakes[playerId].snakexLength[0] &&
+                    snakes[snakeId].snakeyLength[i] == snakes[playerId].snakeyLength[0]) {
+                    flag.set(false); 
+                }
+            });
+        
+            if (!flag.get()) {
+                snakes[playerId].death = true;  
+                break;  
+            }
+        }
+              
+        if (snakes[playerId].moves != 0) {
             for(int i = 0; i < apples.length; i++) {
                 appleImage.paintIcon(this, g, apples[i].getappleXPos(), apples[i].getappleYPos());
             }
         }
-
-        if (snakes[0].moves == 0) {
+   
+        if (snakes[playerId].moves == 0) {
             g.setColor(Color.WHITE);
             g.setFont(new Font("Courier New", Font.BOLD, 20));
             g.drawString("Press Spacebar to Start the Game!", 70, 300);
         }
 
-        // protocols made when the snakes[0] dies
-        if (snakes[0].death) {
+        // protocols made when the snake dies   
+        if (snakes[playerId].death) {
             score.saveNewScore();
-
             g.setColor(Color.RED);
             g.setFont(new Font("Courier New", Font.BOLD, 50));
             g.drawString("Game Over!", 190, 340);
-
+                
             g.setColor(Color.GREEN);
             g.setFont(new Font("Courier New", Font.BOLD, 18));
             g.drawString("Your Score : " + score.getScore(), 250, 370);
@@ -160,31 +176,32 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (snakes[0].moves > 0 && !snakes[0].death) {
-            snakes[0].currentDirection = snakes[0].nextDirection;
-            switch (snakes[0].currentDirection) {
+        if (snakes[playerId].moves > 0 && !snakes[playerId].death) {
+            snakes[playerId].currentDirection = snakes[playerId].nextDirection;
+            switch (snakes[playerId].currentDirection) {
                 case Direction.RIGHT:
-                    snakes[0].movementRight();
+                    snakes[playerId].movementRight();
                     repaint();
                     break;
                 case Direction.LEFT:
-                    snakes[0].movementLeft();
+                    snakes[playerId].movementLeft();
                     repaint();
                     break;
                 case Direction.UP:
-                    snakes[0].movementUp();
+                    snakes[playerId].movementUp();
                     repaint();
                     break;
                 case Direction.DOWN:
-                    snakes[0].movementDown();
+                    snakes[playerId].movementDown();
                     repaint();
                     break;
                 case Direction.NONE:
                     break;
             }
-            snakes[0].moves++;
+            snakes[playerId].moves++;
         }
     }
+    
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -193,43 +210,42 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-         switch (e.getKeyCode()) {
+        switch (e.getKeyCode()) {
             case KeyEvent.VK_SHIFT:
                 if (speedUp.compareAndSet(true, false)) {
                         timer.setDelay(delay/5);
                 }
                 break;
             case KeyEvent.VK_SPACE:
-                if (snakes[0].moves == 0) {
-                    snakes[0].restart();
+                if (snakes[playerId].moves == 0) {
+                    snakes[playerId].restart();
                     timer.start();
                 }
-                if (snakes[0].death) {
+                if (snakes[playerId].death) {
                     
                     score.resetScore();
-                    snakes[0].reset();
-                    started = false;
+                    snakes[playerId].reset();
                     repaint();
                 }
                 break;
             case KeyEvent.VK_D:
             case KeyEvent.VK_RIGHT:
-                snakes[0].moveRight();
+                snakes[playerId].moveRight();
                 repaint();
                 break;
             case KeyEvent.VK_A:
             case KeyEvent.VK_LEFT:
-                snakes[0].moveLeft();
+                snakes[playerId].moveLeft();
                 repaint();
                 break;
             case KeyEvent.VK_W:
             case KeyEvent.VK_UP:
-                snakes[0].moveUp();
+                snakes[playerId].moveUp();
                 repaint();
                 break;
             case KeyEvent.VK_S:
             case KeyEvent.VK_DOWN:
-                snakes[0].moveDown();
+                snakes[playerId].moveDown();
                 repaint();
                 break;
         }
