@@ -54,7 +54,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
             snakes[i] = new Snake(Direction.RIGHT, i*180+199, 253);
         }*/
         for(int i = 0; i < snakes.length; i++) {
-            snakes[i] = new Snake(startingDirection, (i*180 + 199) ,253); // Criando cada instância
+            snakes[i] = new Snake(i, i, (i*180 + 199) ,319); // Criando cada instância
         }
         for(int i = 0; i < apples.length; i++) {
             apples[i] = new Apple(); // Criando cada instância
@@ -97,6 +97,9 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         g.fillRect(gameX + 1, gameY + 1, gameWidth - 1, gameHeight - 1);
 
         for(int i = 0; i < snakes.length ;i++){
+            if (snakes[0].moves == 0) {
+                snakes[i].start();
+            }
             snakes[i].paintSnake(this, g, snakeHead, snakeBody);
         }
 
