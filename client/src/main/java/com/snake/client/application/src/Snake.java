@@ -10,13 +10,14 @@ import javax.swing.JPanel;
 public class Snake {
 
     enum Direction {
-        LEFT, RIGHT, UP, DOWN, NONE;
+        RIGHT, LEFT, UP, DOWN, NONE;
 
         public boolean isOpposite(Direction direction) {
             return this == LEFT && direction == RIGHT || this == RIGHT && direction == LEFT
                     || this == UP && direction == DOWN || this == DOWN && direction == UP;
         }
     }
+    Direction startingDirection;
     Direction currentDirection;
     Direction nextDirection;
     int startingHeadPositionX;
@@ -29,11 +30,12 @@ public class Snake {
     final static int SPEED = 6;
     boolean death;
 
-    public Snake(Direction currentDirection, int startingHeadPositionX, int startingHeadPositionY) {
+    public Snake(int currentDirectionInt, int startingDirectionInt, int startingHeadPositionX, int startingHeadPositionY) {
         this.startingHeadPositionX = startingHeadPositionX;
         this.startingHeadPositionY = startingHeadPositionY;
-        this.currentDirection = currentDirection; // or any initial direction
-        this.nextDirection = currentDirection;
+        this.currentDirection = Direction.values()[currentDirectionInt];
+        this.nextDirection = Direction.values()[currentDirectionInt];
+        this.startingDirection = Direction.values()[startingDirectionInt];
         this.death=false;
         this.lengthOfSnake=5;
         this.moves=0;
@@ -58,14 +60,11 @@ public class Snake {
 
     public void start(){
         for (int i = 0; i < snakeInitialSize; i++) {
-            this.snakexLength[i] = this.startingHeadPositionX;
-            if(this.currentDirection == Direction.RIGHT)
-                this.startingHeadPositionX -= SPEED;
-            else if(this.currentDirection == Direction.LEFT)
-                this.startingHeadPositionX += SPEED;
+            if(startingDirection == Direction.LEFT)
+                this.snakexLength[i] = this.startingHeadPositionX + (i * SPEED);
             else
-                this.startingHeadPositionX -= SPEED;
-            this.snakeyLength[i] = this.startingHeadPositionY;
+                this.snakexLength[i] = this.startingHeadPositionX - (i * SPEED);
+            this.snakeyLength[i] = this.startingHeadPositionY; 
         }
     }
 
@@ -228,10 +227,10 @@ public class Snake {
     private void defaultActions(){
         moves++;
     }
-    
-    public void restart(Direction direction) {
-        this.nextDirection = direction;
-        this.currentDirection = direction;
+
+    public void restart() {
+        this.nextDirection = startingDirection;
+        this.currentDirection = startingDirection;
         defaultActions();
     }
 
