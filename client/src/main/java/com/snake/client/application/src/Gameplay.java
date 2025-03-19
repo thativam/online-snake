@@ -24,7 +24,6 @@ import com.snake.client.domain.aplication.Snake.Direction;
 
 public class Gameplay extends JPanel implements KeyListener, ActionListener {
     private static int delay = 60;
-    Snake[] snakes = new Snake[4];
 
     private static final int GAME_WIDTH = 535; // 505 + 30 for borders
     private static final int GAME_HEIGHT = 550; // 501 + 49 for borders
@@ -36,6 +35,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     
 
     private static int playerId = 1;
+    Snake[] snakes = new Snake[4];
     
     Apple[] apples = new Apple[10];
 
@@ -55,7 +55,23 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
             snakes[i] = new Snake(Direction.RIGHT, i*180+199, 253);
         }*/
         for(int i = 0; i < snakes.length; i++) {
-            snakes[i] = new Snake(i, i, (i*180 + 199) ,319); // Criando cada instância
+            int xPos = i*180 + 199;
+            int yPos;
+            if (snakes.length == 2) {
+                yPos = 319;  
+            } else if (snakes.length == 3) {
+                yPos = (i == 2) ? 409 : 229; 
+                if(i == 2) xPos = 289;
+            } else {
+                yPos = (i <= 1) ? 229 : 409; 
+                xPos = (i % 2 == 0) ? 199 : 379; 
+            } 
+            if (snakes.length != 4) {
+                snakes[i] = new Snake(i, i, xPos, yPos);
+            }
+            else{
+                snakes[i] = new Snake(i%2, i%2, xPos, yPos);
+            }
         }
         for(int i = 0; i < apples.length; i++) {
             apples[i] = new Apple(); // Criando cada instância
