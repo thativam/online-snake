@@ -105,6 +105,9 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         g.fillRect(25, 72, 505, 500);
 
         for(int i = 0; i < snakes.length ;i++){
+            if (snakes[0].moves == 0) {
+                snakes[i].start();
+            }
             snakes[i].paintSnake(this, g, snakeHead, snakeBody);
         }
 
