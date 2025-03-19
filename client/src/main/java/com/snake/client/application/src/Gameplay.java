@@ -30,9 +30,10 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
     Direction startingDirection = Direction.LEFT;
     
-    private String highScore;
-    Apple[] apples = new Apple[5];
 
+    private static int playerId = 1;
+    
+    Apple[] apples = new Apple[10];
 
     final static String imageBasePath = "client/src/main/java/com/snake/client/resources/gameImages/" + "";
 
@@ -105,35 +106,6 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         g.fillRect(25, 72, 505, 500);
 
         for(int i = 0; i < snakes.length ;i++){
-            if (snakes[0].moves == 0) {
-                snakes[i].start();
-            }
-            snakes[i].paintSnake(this, g, snakeHead, snakeBody);
-        }
-
-        // Rectangle inside the score panel
-        g.setColor(Color.white);
-        g.drawRect(653, 130, 221, 1);
-
-        // Set Font Color
-        g.setFont(new Font("Helvetica", Font.BOLD, 20));
-        g.drawString("SCORE : " + score.getScore(), 720, 110);
-        highScore = score.getHighscore();
-        g.drawString("HIGHSCORE", 705, 180);
-        drawString(g, highScore, 755, 200);
-
-        g.drawRect(653, 490, 221, 1);
-        g.setFont(new Font("Helvetica", Font.BOLD, 15));
-
-        arrowImage.paintIcon(this, g, 660, 550);
-        g.setFont(new Font("Helvetica", Font.PLAIN, 16));
-        g.drawString("Movement", 770, 580);
-        g.drawString("Posição Cobra 1 X: " + snakes[1].snakexLength[0] + " Y: " + snakes[1].snakeyLength[0],  665, 520);
-
-        shiftImage.paintIcon(this, g, 685, 625);
-        g.drawString("Boost", 770, 640);
-
-        for(int i = 0; i < snakes.length ;i++){
             if (snakes[i].moves == 0) {
                 snakes[i].start();
             }
@@ -141,8 +113,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         }
          
         for(int i = 0; i < apples.length ;i++){
-            if (apples[i].getappleXPos() == snakes[playerId].snakexLength[0] && (apples[i].getappleYPos() == snakes[playerId].snakeyLength[0])) {
-                snakes[playerId].lengthOfSnake++;
+            if (apples[i].getappleXPos() == snakes[playerId].getSnakexLength()[0] && (apples[i].getappleYPos() == snakes[playerId].getSnakeyLength()[0])) {
+                snakes[playerId].increaseSnakeSize();
                 score.increaseScore();
                 apples[i] = new Apple();
             }
@@ -170,15 +142,15 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
                 appleImage.paintIcon(this, g, apples[i].getappleXPos(), apples[i].getappleYPos());
             }
         }
-
-        if (snakes[0].getMoves() == 0) {
+   
+        if (snakes[playerId].getMoves() == 0) {
             g.setColor(Color.WHITE);
             g.setFont(new Font("Courier New", Font.BOLD, 20));
             g.drawString("Press Spacebar to Start the Game!", 70, 300);
         }
 
         // protocols made when the snake dies   
-        if (snakes[playerId].death) {
+        if (snakes[playerId].isDeath()) {
             score.saveNewScore();
             g.setColor(Color.RED);
             g.setFont(new Font("Courier New", Font.BOLD, 50));
@@ -218,9 +190,9 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (snakes[playerId].moves > 0 && !snakes[playerId].death) {
-            snakes[playerId].currentDirection = snakes[playerId].nextDirection;
-            switch (snakes[playerId].currentDirection) {
+        if (snakes[playerId].getMoves() > 0 && !snakes[playerId].isDeath()) {
+            snakes[playerId].setCurrentDirection();
+            switch (snakes[playerId].getCurrentDirection()) {
                 case Direction.RIGHT:
                     snakes[playerId].movementRight();
                     repaint();
@@ -240,7 +212,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
                 case Direction.NONE:
                     break;
             }
-            snakes[playerId].moves++;
+            snakes[playerId].increaseMoves();
         }
     }
     
@@ -259,11 +231,11 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
                 }
                 break;
             case KeyEvent.VK_SPACE:
-                if (snakes[playerId].moves == 0) {
+                if (snakes[playerId].getMoves() == 0) {
                     snakes[playerId].restart();
                     timer.start();
                 }
-                if (snakes[playerId].death) {
+                if (snakes[playerId].isDeath()) {
                     
                     score.resetScore();
                     snakes[playerId].reset();
