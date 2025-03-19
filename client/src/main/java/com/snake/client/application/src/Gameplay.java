@@ -218,6 +218,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
             snakes[playerId].increaseMoves();
         }
     }
+    
 
     @Override
     public void keyTyped(KeyEvent e) {
