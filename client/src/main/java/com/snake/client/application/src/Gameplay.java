@@ -18,8 +18,8 @@ import com.snake.client.application.src.Snake.Direction;
 
 public class Gameplay extends JPanel implements KeyListener, ActionListener {
     private static int delay = 60;
-    private static int playerId = 1;
-    Snake[] snakes = new Snake[2];
+    private static int playerId = 0;
+    Snake[] snakes = new Snake[4];
     Score score = new Score();
     
     private String highScore;
@@ -40,7 +40,23 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
     public Gameplay() {
         for(int i = 0; i < snakes.length; i++) {
-            snakes[i] = new Snake(i, i, (i*180 + 199) ,319); // Criando cada instância
+            int xPos = i*180 + 199;
+            int yPos;
+            if (snakes.length == 2) {
+                yPos = 319;  
+            } else if (snakes.length == 3) {
+                yPos = (i == 2) ? 409 : 229; 
+                if(i == 2) xPos = 289;
+            } else {
+                yPos = (i <= 1) ? 229 : 409; 
+                xPos = (i % 2 == 0) ? 199 : 379; 
+            } 
+            if (snakes.length != 4) {
+                snakes[i] = new Snake(i, i, xPos, yPos);
+            }
+            else{
+                snakes[i] = new Snake(i%2, i%2, xPos, yPos);
+            }
         }
         for(int i = 0; i < apples.length; i++) {
             apples[i] = new Apple(); // Criando cada instância
