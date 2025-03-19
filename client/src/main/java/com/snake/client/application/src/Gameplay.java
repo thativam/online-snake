@@ -24,14 +24,18 @@ import com.snake.client.domain.aplication.Snake.Direction;
 
 public class Gameplay extends JPanel implements KeyListener, ActionListener {
     private static int delay = 60;
-    private static int playerId = 0;
-    Snake[] snakes = new Snake[4];
-    Score score = new Score();
+
+    private static final int GAME_WIDTH = 535; // 505 + 30 for borders
+    private static final int GAME_HEIGHT = 550; // 501 + 49 for borders
+
+    private List<SubscriberData> subscribers = new ArrayList<>();
+    private Score score;
 
     Direction startingDirection = Direction.LEFT;
     
 
     private static int playerId = 1;
+    Snake[] snakes = new Snake[4];
     
     Apple[] apples = new Apple[10];
 
