@@ -134,7 +134,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
             AtomicBoolean flag = new AtomicBoolean(true);  
             IntStream.range(1, snakes[snakeId].getLengthOfSnake()).parallel().forEach(i -> {
                 if (snakes[snakeId].getSnakexLength()[i] == snakes[playerId].getSnakexLength()[0] &&
-                    snakes[snakeId].getSnakeyLength()[i] == snakes[playerId].getSnakeyLength()[0]) {
+                    snakes[snakeId].getSnakeyLength()[i] == snakes[playerId].getSnakeyLength()[0] && snakeId != playerId) {
                     flag.set(false); 
                 }
             });
