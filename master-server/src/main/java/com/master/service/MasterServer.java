@@ -3,6 +3,9 @@ package com.master.service;
 import java.io.IOException;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.master.domain.DefaultMatchMaking;
 import com.master.domain.ISnakeServer;
 import com.master.domain.MatchMakingPlayers;
@@ -10,6 +13,7 @@ import com.master.domain.SnakeServer;
 
 public class MasterServer implements IMasterServer {
     private ISnakeServer server;
+    private static final Logger logger = LoggerFactory.getLogger(MasterServer.class);
 
     public void start(int port, List<Class<?>> communicateClass) {
         server = new SnakeServer();
@@ -23,23 +27,23 @@ public class MasterServer implements IMasterServer {
             server.addClientListener();
             server.start();
         } catch (IOException e) {
-            System.out.println("Error while trying to bind port" + e);
+            logger.error("Error while trying to bind port" + e);
         }
     }
 
     public void stop() {
-        System.out.println("Master server stopped");
+        logger.info("Master server stopped");
     }
 
     public void restart() {
-        System.out.println("Master server restarted");
+        logger.info("Master server restarted");
     }
 
     public void status() {
-        System.out.println("Master server status");
+        logger.info("Master server status");
     }
 
     public void exit() {
-        System.out.println("Master server exit");
+        logger.info("Master server exit");
     }
 }

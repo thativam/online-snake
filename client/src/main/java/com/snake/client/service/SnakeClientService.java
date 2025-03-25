@@ -3,6 +3,9 @@ package com.snake.client.service;
 import java.io.IOException;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -19,6 +22,7 @@ public class SnakeClientService implements ISnakeClientService {
     private ISnakeClient client;
     private ISnakeClient childClient;
     private List<Class<?>> classes;
+    private static final Logger logger = LoggerFactory.getLogger(SnakeClientService.class);
 
     public SnakeClientService(ISnakeClient client) {
         this.client = client;
@@ -30,19 +34,19 @@ public class SnakeClientService implements ISnakeClientService {
         for (Class<?> clazz : classes) {
             client.register(clazz);
         }
-        System.out.println("Client starting ...   ");
+        logger.info("Client starting ...   ");
         client.addListener(new Listener() {
             @Override
             public void connected(Connection connection) {
-                System.out.println("Client connected to server: " + connection.getRemoteAddressTCP());
+                logger.info("Client connected to server: " + connection.getRemoteAddressTCP());
             }
 
             @Override
             public void received(Connection connection, Object object) {
-                System.out.println("Received object: " + object);
+                logger.info("Received object: " + object);
                 if (object instanceof Redirect) {
                     Redirect redirect = (Redirect) object;
-                    System.out.println("Received redirect. New server port: " + redirect.getPort());
+                    logger.info("Received redirect. New server port: " + redirect.getPort());
 
                     connection.sendTCP("ACK");
                     connectToChildServer(redirect.getPort());
@@ -51,7 +55,7 @@ public class SnakeClientService implements ISnakeClientService {
 
             @Override
             public void disconnected(Connection connection) {
-                System.out.println("Client disconnected from Master Server");
+                logger.info("Client disconnected from Master Server");
             }
         });
     }
@@ -70,12 +74,12 @@ public class SnakeClientService implements ISnakeClientService {
         childClient.addListener(new Listener() {
             @Override
             public void received(Connection connection, Object object) {
-                System.out.println("[CLIENT] Message from child server: " + object);
+                logger.info("[CLIENT] Message from child server: " + object);
             }
 
             @Override
             public void disconnected(Connection connection) {
-                System.out.println("Client disconnected from Child Server");
+                logger.info("Client disconnected from Child Server");
             }
         });
         
