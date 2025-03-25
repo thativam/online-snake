@@ -27,7 +27,7 @@ public class MasterServer implements IMasterServer {
             server.addClientListener();
             server.start();
         } catch (IOException e) {
-            logger.error("Error while trying to bind port", e);
+            logger.error("Error while trying to bind port" + e);
         }
     }
 
