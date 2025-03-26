@@ -14,18 +14,19 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import com.snake.client.application.src.Snake.Direction;
+import com.snake.client.domain.Score;
+import com.snake.client.domain.Snake;
+import com.snake.client.domain.Snake.Direction;
 
 public class Gameplay extends JPanel implements KeyListener, ActionListener {
     private static int delay = 60;
     private static int playerId = 0;
     Snake[] snakes = new Snake[4];
     Score score = new Score();
-    
-    private String highScore;
-    final static String imageBasePath = "client/src/main/java/com/snake/client/resources/gameImages/" + ""; 
-    Apple[] apples = new Apple[5];
 
+    private String highScore;
+    final static String imageBasePath = "client/src/main/java/com/snake/client/resources/gameImages/" + "";
+    Apple[] apples = new Apple[5];
 
     private Timer timer;
 
@@ -37,7 +38,6 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     private ImageIcon shiftImage;
     private ImageIcon snakeBody;
     private ImageIcon snakeHead;
-
 
     public Gameplay() {
         for(int i = 0; i < snakes.length; i++) {
@@ -67,10 +67,10 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         setFocusTraversalKeysEnabled(false);
         loadImages();
         timer = new Timer(delay, this);
-        
+
     }
 
-    private void loadImages(){
+    private void loadImages() {
         snakeHead = new ImageIcon(imageBasePath + "snakeHead4.png");
         snakeBody = new ImageIcon(imageBasePath + "snakeimage4.png");
         appleImage = new ImageIcon(imageBasePath + "apple4.png");
@@ -106,7 +106,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         g.setColor(Color.white);
         g.drawRect(653, 130, 221, 1);
 
-        //Set Font Color
+        // Set Font Color
         g.setFont(new Font("Helvetica", Font.BOLD, 20));
         g.drawString("SCORE : " + score.getScore(), 720, 110);
         highScore = score.getHighscore();
@@ -230,7 +230,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_SHIFT:
                 if (speedUp.compareAndSet(true, false)) {
-                        timer.setDelay(delay/5);
+                    timer.setDelay(delay / 5);
                 }
                 break;
             case KeyEvent.VK_SPACE:

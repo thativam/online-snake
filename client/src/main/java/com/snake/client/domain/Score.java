@@ -1,4 +1,4 @@
-package com.snake.client.application.src;
+package com.snake.client.domain;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -14,29 +14,38 @@ import org.slf4j.LoggerFactory;
 
 import com.snake.client.utils.StringUtils;
 
+import lombok.Getter;
+
 /**
- * The Score class is responsible for managing the player's score and high scores.
+ * The Score class is responsible for managing the player's score and high
+ * scores.
  * It provides functionality to increase, reset, and retrieve the current score,
- * as well as manage a list of high scores. High scores are currently stored in a file,
+ * as well as manage a list of high scores. High scores are currently stored in
+ * a file,
  * but future implementations will read from a database.
  *
- * <p>Key Features:
+ * <p>
+ * Key Features:
  * - Tracks the current score of the player.
  * - Maintains a list of high scores, sorted in descending order.
  * - Reads high scores from a file during initialization.
  * - Writes updated high scores to a file after a new score is saved.
  * - Limits the high score list to a maximum of 10 entries.
  *
- * <p>Future Enhancements:
+ * <p>
+ * Future Enhancements:
  * - Replace file-based storage with database integration for high scores.
  *
- * <p>Usage:
+ * <p>
+ * Usage:
  * - Use {@link #increaseScore()} to increment the current score.
  * - Use {@link #resetScore()} to reset the score to zero.
  * - Use {@link #getScore()} to retrieve the current score.
  * - Use {@link #getHighScore()} to retrieve the top 10 high scores as a list.
- * - Use {@link #saveNewScore()} to save the current score to the high score list.
+ * - Use {@link #saveNewScore()} to save the current score to the high score
+ * list.
  */
+@Getter
 public class Score {
     private int score;
     private List<Integer> highScoreList;
@@ -50,39 +59,34 @@ public class Score {
         readFile();
     }
 
-    public void increaseScore(){
+    public void increaseScore() {
         this.score++;
     }
 
-    public void resetScore(){
-        this.score=0;
-    }
-
-    public int getScore(){
-        return this.score;
+    public void resetScore() {
+        this.score = 0;
     }
 
     public List<Integer> getHighScore() {
-        highScoreList.sort((a,b)->b-a);
-        if(highScoreList.size() == 0){
+        highScoreList.sort((a, b) -> b - a);
+        if (highScoreList.size() == 0) {
             readFile();
             return highScoreList.subList(0, 10);
         }
         return highScoreList.subList(0, 10);
     }
 
-    public String getHighscore(){
-        highScoreList.sort((a,b)->b-a);
-        if(highScoreList.size() == 0){
+    public String getHighscore() {
+        highScoreList.sort((a, b) -> b - a);
+        if (highScoreList.size() == 0) {
             readFile();
             return StringUtils.stringFormat(highScoreList.subList(0, 10));
         }
         return StringUtils.stringFormat(highScoreList.subList(0, 10));
     }
 
-
     // TODO: Implement database integration for high scores
-    private void readFile(){
+    private void readFile() {
         FileReader readFile = null;
         BufferedReader reader = null;
         try {
@@ -93,18 +97,17 @@ public class Score {
             highScoreList.add(Integer.parseInt(line));
             String allLines = line;
 
-            int i =1;
-            while (line != null && i<MAX_VALUES) {
+            int i = 1;
+            while (line != null && i < MAX_VALUES) {
                 line = reader.readLine();
-                
+
                 if (line == null)
                     break;
                 highScoreList.add(Integer.parseInt(line));
                 allLines = allLines.concat("\n" + line);
                 i++;
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             highScoreList = new ArrayList<Integer>(Collections.nCopies(MAX_VALUES, 0));
 
             logger.error("there was a problem reading the file", e);
@@ -112,8 +115,7 @@ public class Score {
             try {
                 if (reader != null)
                     reader.close();
-            } 
-            catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -121,7 +123,7 @@ public class Score {
 
     // TODO: Implement database integration for high scores
     private void writeFile() {
-        
+
         FileWriter writeFile = null;
         BufferedWriter writer = null;
         try {
@@ -134,7 +136,7 @@ public class Score {
                 if (i > size - 1) {
                     String def = "0";
                     writer.write(def);
-                } else { 
+                } else {
                     writer.write(String.valueOf(highScoreList.get(i)));
                 }
                 if (i < 9) {
@@ -147,8 +149,7 @@ public class Score {
             try {
                 if (writer != null)
                     writer.close();
-            } 
-            catch (IOException e) {
+            } catch (IOException e) {
                 return;
             }
         }
@@ -157,7 +158,7 @@ public class Score {
 
     public void saveNewScore() {
         highScoreList.add(this.getScore());
-        highScoreList.sort((a,b)->b-a);
+        highScoreList.sort((a, b) -> b - a);
         writeFile();
     }
 }
