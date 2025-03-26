@@ -13,14 +13,14 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import com.snake.client.domain.Score;
-import com.snake.client.domain.Snake;
-import com.snake.client.domain.Snake.Direction;
+import com.snake.client.domain.aplication.Apple;
+import com.snake.client.domain.aplication.Score;
+import com.snake.client.domain.aplication.Snake;
+import com.snake.client.domain.aplication.Snake.Direction;
 
 public class Gameplay extends JPanel implements KeyListener, ActionListener {
     private static int delay = 60;
     private int snakeHeadXPos = 379;
-
     Snake snake = new Snake(Direction.RIGHT);
     Snake snake2 = new Snake(Direction.UP);
     Score score = new Score();
@@ -67,12 +67,10 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
             snakeHeadXPos = snake.start(snakeHeadXPos);
             started = true;
         }
-
         g.setColor(Color.WHITE);
         g.drawRect(24, 10, 852, 55);
 
         titleImage.paintIcon(this, g, 25, 11);
-
         // Game Border for the game
         g.setColor(Color.WHITE);
         g.drawRect(24, 71, 506, 501);

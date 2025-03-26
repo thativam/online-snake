@@ -1,4 +1,4 @@
-package com.snake.client.domain;
+package com.snake.client.domain.aplication;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
