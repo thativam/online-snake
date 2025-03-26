@@ -23,7 +23,6 @@ import com.snake.client.domain.aplication.Snake;
 import com.snake.client.domain.aplication.Snake.Direction;
 
 public class Gameplay extends JPanel implements KeyListener, ActionListener {
-    private static int delay = 60;
 
     private static final int GAME_WIDTH = 535; // 505 + 30 for borders
     private static final int GAME_HEIGHT = 550; // 501 + 49 for borders
@@ -32,11 +31,9 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     private Score score;
 
     Direction startingDirection = Direction.LEFT;
-    
-
-    private static int playerId = 1;
+    private static int delay = 60;
+    private static int playerId = 0;
     Snake[] snakes = new Snake[4];
-    
     Apple[] apples = new Apple[10];
 
     final static String imageBasePath = "client/src/main/java/com/snake/client/resources/gameImages/" + "";
@@ -58,22 +55,22 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
             int xPos = i*180 + 199;
             int yPos;
             if (snakes.length == 2) {
-                yPos = 319;  
+                yPos = 319;
             } else if (snakes.length == 3) {
-                yPos = (i == 2) ? 409 : 229; 
-                if(i == 2) xPos = 289;
+                yPos = (i == 2) ? 409 : 229;
+                if (i == 2)
+                    xPos = 289;
             } else {
-                yPos = (i <= 1) ? 229 : 409; 
-                xPos = (i % 2 == 0) ? 199 : 379; 
-            } 
+                yPos = (i <= 1) ? 229 : 409;
+                xPos = (i % 2 == 0) ? 199 : 379;
+            }
             if (snakes.length != 4) {
                 snakes[i] = new Snake(i, i, xPos, yPos);
-            }
-            else{
-                snakes[i] = new Snake(i%2, i%2, xPos, yPos);
+            } else {
+                snakes[i] = new Snake(i % 2, i % 2, xPos, yPos);
             }
         }
-        for(int i = 0; i < apples.length; i++) {
+        for (int i = 0; i < apples.length; i++) {
             apples[i] = new Apple(); // Criando cada instância
         }
         // SET SNAKE BORDER CORRECT "Snake.setBOTTOM_BORDER(22);"
@@ -113,7 +110,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         g.setColor(Color.black);
         g.fillRect(gameX + 1, gameY + 1, gameWidth - 1, gameHeight - 1);
 
-        for(int i = 0; i < snakes.length ;i++){
+        for (int i = 0; i < snakes.length; i++) {
             if (snakes[i].moves == 0) {
                 snakes[i].start();
             }
@@ -127,8 +124,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
                 apples[i] = new Apple();
             }
         }
-        
-        //check if player snake has hit any part of another snake
+
+        // check if player snake has hit any part of another snake
         for (int j = 0; j < snakes.length; j++) {
             final int snakeId = j;
             AtomicBoolean flag = new AtomicBoolean(true);  
@@ -138,15 +135,15 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
                     flag.set(false); 
                 }
             });
-        
+
             if (!flag.get()) {
-                snakes[playerId].death = true;  
-                break;  
+                snakes[playerId].setDeath(true);
+                break;
             }
         }
-              
-        if (snakes[playerId].moves != 0) {
-            for(int i = 0; i < apples.length; i++) {
+
+        if (snakes[playerId].getMoves() != 0) {
+            for (int i = 0; i < apples.length; i++) {
                 appleImage.paintIcon(this, g, apples[i].getappleXPos(), apples[i].getappleYPos());
             }
         }
@@ -163,7 +160,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
             g.setColor(Color.RED);
             g.setFont(new Font("Courier New", Font.BOLD, 50));
             g.drawString("Game Over!", 190, 340);
-                
+
             g.setColor(Color.GREEN);
             g.setFont(new Font("Courier New", Font.BOLD, 18));
             g.drawString("Your Score : " + score.getScore(), 220, 370);
@@ -223,7 +220,6 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
             snakes[playerId].increaseMoves();
         }
     }
-    
 
     @Override
     public void keyTyped(KeyEvent e) {
