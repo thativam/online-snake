@@ -1,4 +1,4 @@
-package com.snake.client.domain;
+package com.snake.client.domain.aplication;
 
 import java.awt.Graphics;
 import java.util.concurrent.atomic.AtomicBoolean;
