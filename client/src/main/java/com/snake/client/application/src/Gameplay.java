@@ -13,7 +13,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import com.snake.client.application.src.Snake.Direction;
+import com.snake.client.domain.Score;
+import com.snake.client.domain.Snake;
+import com.snake.client.domain.Snake.Direction;
 
 public class Gameplay extends JPanel implements KeyListener, ActionListener {
     private static int delay = 60;
@@ -22,11 +24,10 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     Snake snake = new Snake(Direction.RIGHT);
     Snake snake2 = new Snake(Direction.UP);
     Score score = new Score();
-    
-    private String highScore;
-    final static String imageBasePath = "client\\src\\main\\java\\com\\snake\\client\\resources\\gameImages\\" + ""; 
-    Apple[] apples = new Apple[5];
 
+    private String highScore;
+    final static String imageBasePath = "client/src/main/java/com/snake/client/resources/gameImages/" + "";
+    Apple[] apples = new Apple[5];
 
     private Timer timer;
     private boolean started = false;
@@ -40,9 +41,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     private ImageIcon snakeBody;
     private ImageIcon snakeHead;
 
-
     public Gameplay() {
-        for(int i = 0; i < apples.length; i++) {
+        for (int i = 0; i < apples.length; i++) {
             apples[i] = new Apple(); // Criando cada instância
         }
         addKeyListener(this);
@@ -50,10 +50,10 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         setFocusTraversalKeysEnabled(false);
         loadImages();
         timer = new Timer(delay, this);
-        
+
     }
 
-    private void loadImages(){
+    private void loadImages() {
         snakeHead = new ImageIcon(imageBasePath + "snakeHead4.png");
         snakeBody = new ImageIcon(imageBasePath + "snakeimage4.png");
         appleImage = new ImageIcon(imageBasePath + "apple4.png");
@@ -63,16 +63,14 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     }
 
     public void paint(Graphics g) {
-        if (snake.moves == 0 && started == false) {
+        if (snake.getMoves() == 0 && started == false) {
             snakeHeadXPos = snake.start(snakeHeadXPos);
             started = true;
         }
 
-
         g.setColor(Color.WHITE);
         g.drawRect(24, 10, 852, 55);
 
-        
         titleImage.paintIcon(this, g, 25, 11);
 
         // Game Border for the game
@@ -95,7 +93,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         g.setColor(Color.white);
         g.drawRect(653, 130, 221, 1);
 
-        //Set Font Color
+        // Set Font Color
         g.setFont(new Font("Helvetica", Font.BOLD, 20));
         g.drawString("SCORE : " + score.getScore(), 720, 110);
         highScore = score.getHighscore();
@@ -105,8 +103,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         g.drawRect(653, 490, 221, 1);
         g.setFont(new Font("Helvetica", Font.BOLD, 15));
         g.drawString("Posição Maçã: " + apples[0].printPosition(), 665, 510);
-        g.drawString("Posição cobra: X: " + snake.snakexLength[0] + " Y: "+ snake.snakeyLength[0], 665, 530);
-       
+        g.drawString("Posição cobra: X: " + snake.getSnakexLength()[0] + " Y: " + snake.getSnakeyLength()[0], 665, 530);
 
         arrowImage.paintIcon(this, g, 660, 550);
         g.setFont(new Font("Helvetica", Font.PLAIN, 16));
@@ -115,34 +112,31 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         shiftImage.paintIcon(this, g, 685, 625);
         g.drawString("Boost", 770, 640);
 
-
         snake.paintSnake(this, g, snakeHead, snakeBody);
 
-
-        for(int i = 0; i < apples.length ;i++){
-            if (apples[i].getappleXPos() == snake.snakexLength[0] && (apples[i].getappleYPos() == snake.snakeyLength[0])) {
-                snake.lengthOfSnake++;
+        for (int i = 0; i < apples.length; i++) {
+            if (apples[i].getappleXPos() == snake.getSnakexLength()[0]
+                    && (apples[i].getappleYPos() == snake.getSnakeyLength()[0])) {
+                snake.increaseSnakeSize();
                 score.increaseScore();
                 apples[i] = new Apple();
             }
         }
 
-        if (snake.moves != 0) {
-            for(int i = 0; i < apples.length; i++) {
+        if (snake.getMoves() != 0) {
+            for (int i = 0; i < apples.length; i++) {
                 appleImage.paintIcon(this, g, apples[i].getappleXPos(), apples[i].getappleYPos());
             }
         }
 
-        if (snake.moves == 0) {
+        if (snake.getMoves() == 0) {
             g.setColor(Color.WHITE);
             g.setFont(new Font("Courier New", Font.BOLD, 20));
             g.drawString("Press Spacebar to Start the Game!", 70, 300);
         }
 
-        
-
         // protocols made when the snake dies
-        if (snake.death) {
+        if (snake.isDeath()) {
             score.saveNewScore();
 
             g.setColor(Color.RED);
@@ -167,9 +161,9 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (snake.moves > 0 && !snake.death) {
-            snake.currentDirection = snake.nextDirection;
-            switch (snake.currentDirection) {
+        if (snake.getMoves() > 0 && !snake.isDeath()) {
+            snake.setCurrentDirection();
+            switch (snake.getCurrentDirection()) {
                 case Direction.RIGHT:
                     snake.movementRight();
                     repaint();
@@ -189,7 +183,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
                 case Direction.NONE:
                     break;
             }
-            snake.moves++;
+            snake.increaseMoves();
         }
     }
 
@@ -200,20 +194,20 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-         switch (e.getKeyCode()) {
+        switch (e.getKeyCode()) {
             case KeyEvent.VK_SHIFT:
                 if (speedUp.compareAndSet(true, false)) {
-                        timer.setDelay(delay/5);
+                    timer.setDelay(delay / 5);
                 }
                 break;
             case KeyEvent.VK_SPACE:
-                if (snake.moves == 0) {
+                if (snake.getMoves() == 0) {
                     snake.restart();
                     snake2.restart();
                     timer.start();
                 }
-                if (snake.death) {
-                    
+                if (snake.isDeath()) {
+
                     score.resetScore();
                     snake.reset();
                     snake2.reset();

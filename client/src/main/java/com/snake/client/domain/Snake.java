@@ -1,4 +1,4 @@
-package com.snake.client.application.src;
+package com.snake.client.domain;
 
 import java.awt.Graphics;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -7,9 +7,12 @@ import java.util.stream.IntStream;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
+import lombok.Getter;
+
+@Getter
 public class Snake {
 
-    enum Direction {
+    public enum Direction {
         LEFT, RIGHT, UP, DOWN, NONE;
 
         public boolean isOpposite(Direction direction) {
@@ -17,6 +20,7 @@ public class Snake {
                     || this == UP && direction == DOWN || this == DOWN && direction == UP;
         }
     }
+
     Direction currentDirection;
 
     Direction nextDirection;
@@ -30,26 +34,36 @@ public class Snake {
 
     boolean death;
 
+    public void increaseSnakeSize() {
+        this.lengthOfSnake++;
+    }
 
-
+    public void increaseMoves() {
+        this.moves++;
+    }
 
     public Snake(Direction currentDirection) {
         this.currentDirection = currentDirection; // or any initial direction
         this.nextDirection = currentDirection;
-        this.death=false;
-        this.lengthOfSnake=5;
-        this.moves=0;
+        this.death = false;
+        this.lengthOfSnake = 5;
+        this.moves = 0;
     }
 
-    public void paintSnake(JPanel gameFrame, Graphics g, ImageIcon snakeHead, ImageIcon snakeBody) {        
-        snakeHead.paintIcon(gameFrame, g, this.snakexLength[0], this.snakeyLength[0]);
-        IntStream.range(1, this.lengthOfSnake).parallel().forEach(i -> 
-            snakeBody.paintIcon(gameFrame, g, this.snakexLength[i], this.snakeyLength[i])
-        );
+    public void setCurrentDirection() {
+        this.currentDirection = this.nextDirection;
     }
-    public Boolean generalCheck(){
-        
-        // if snake's head's x and y positions == any other part of the snake, the snake dies
+
+    public void paintSnake(JPanel gameFrame, Graphics g, ImageIcon snakeHead, ImageIcon snakeBody) {
+        snakeHead.paintIcon(gameFrame, g, this.snakexLength[0], this.snakeyLength[0]);
+        IntStream.range(1, this.lengthOfSnake).parallel()
+                .forEach(i -> snakeBody.paintIcon(gameFrame, g, this.snakexLength[i], this.snakeyLength[i]));
+    }
+
+    public Boolean generalCheck() {
+
+        // if snake's head's x and y positions == any other part of the snake, the snake
+        // dies
         AtomicBoolean flag = new AtomicBoolean(true);
         IntStream.range(1, this.lengthOfSnake).parallel().forEach(i -> {
             if (this.snakexLength[i] == this.snakexLength[0] && this.snakeyLength[i] == this.snakeyLength[0]) {
@@ -59,7 +73,7 @@ public class Snake {
         return flag.get();
     }
 
-    public int start(int snakeHeadXPos){
+    public int start(int snakeHeadXPos) {
         for (int i = 0; i < snakeInitialSize; i++) {
             this.snakexLength[i] = snakeHeadXPos;
             snakeHeadXPos -= SPEED;
@@ -68,7 +82,7 @@ public class Snake {
         return snakeHeadXPos;
     }
 
-    public void moveRight(){
+    public void moveRight() {
         if (this.moves != 0 && !this.death) {
             if (!currentDirection.isOpposite(Direction.RIGHT)) {
                 nextDirection = Direction.RIGHT;
@@ -76,7 +90,7 @@ public class Snake {
         }
     }
 
-    public void moveLeft(){
+    public void moveLeft() {
         if (this.moves != 0 && !this.death) {
             if (!currentDirection.isOpposite(Direction.LEFT)) {
                 nextDirection = Direction.LEFT;
@@ -84,15 +98,15 @@ public class Snake {
         }
     }
 
-    public void moveUp(){
+    public void moveUp() {
         if (this.moves != 0 && !this.death) {
             if (!currentDirection.isOpposite(Direction.UP)) {
                 nextDirection = Direction.UP;
-            } 
+            }
         }
     }
 
-    public void moveDown(){
+    public void moveDown() {
         if (this.moves != 0 && !this.death) {
             if (!currentDirection.isOpposite(Direction.DOWN)) {
                 nextDirection = Direction.DOWN;
@@ -105,19 +119,19 @@ public class Snake {
         this.currentDirection = Direction.NONE;
     }
 
-    private int[] updateArray(int[] arr){
+    private int[] updateArray(int[] arr) {
         int[] temp = new int[750];
 
         IntStream.range(1, lengthOfSnake + 1)
-        .parallel()
-        .forEach(i -> temp[i] = arr[i - 1]);
-        
+                .parallel()
+                .forEach(i -> temp[i] = arr[i - 1]);
+
         temp[0] = arr[0];
         return temp;
     }
 
-    public void movementRight(){
-        if (!generalCheck()){
+    public void movementRight() {
+        if (!generalCheck()) {
             dead();
         }
         if (this.moves != 0 && !this.death) {
@@ -136,8 +150,8 @@ public class Snake {
         }
     }
 
-    public void movementLeft(){
-        if (!generalCheck()){
+    public void movementLeft() {
+        if (!generalCheck()) {
             dead();
         }
         if (this.moves != 0 && !this.death) {
@@ -156,8 +170,8 @@ public class Snake {
         }
     }
 
-    public void movementUp(){
-        if (!generalCheck()){
+    public void movementUp() {
+        if (!generalCheck()) {
             dead();
         }
         if (this.moves != 0 && !this.death) {
@@ -176,8 +190,8 @@ public class Snake {
         }
     }
 
-    public void movementDown(){
-        if (!generalCheck()){
+    public void movementDown() {
+        if (!generalCheck()) {
             dead();
         }
         if (this.moves != 0 && !this.death) {
@@ -227,21 +241,22 @@ public class Snake {
     public void restart() {
         this.nextDirection = Direction.RIGHT;
         this.currentDirection = Direction.RIGHT;
-        defaultActions();  
+        defaultActions();
     }
 
-    private void defaultActions(){
+    private void defaultActions() {
         moves++;
     }
+
     public void restart(Direction direction) {
         this.nextDirection = direction;
         this.currentDirection = direction;
         defaultActions();
     }
 
-    public void reset(){
-        moves= 0;
-        lengthOfSnake= snakeInitialSize;
+    public void reset() {
+        moves = 0;
+        lengthOfSnake = snakeInitialSize;
         death = false;
     }
 }
