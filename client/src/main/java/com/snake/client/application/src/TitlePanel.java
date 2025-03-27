@@ -19,6 +19,8 @@ public class TitlePanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawRect(24, 10, 852, 55);
+        g.fillRect(0, 0, getWidth(), getHeight());
+        setBackground(getBackground());
         titleImage.paintIcon(this, g, 25, 11);
     }
 }
