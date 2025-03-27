@@ -34,7 +34,6 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     AtomicBoolean speedUp = new AtomicBoolean(true);
 
     private ImageIcon appleImage;
-    private ImageIcon titleImage;
     private ImageIcon arrowImage;
     private ImageIcon shiftImage;
     private ImageIcon snakeBody;
@@ -75,16 +74,19 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         snakeHead = new ImageIcon(imageBasePath + "snakeHead4.png");
         snakeBody = new ImageIcon(imageBasePath + "snakeimage4.png");
         appleImage = new ImageIcon(imageBasePath + "apple4.png");
-        titleImage = new ImageIcon(imageBasePath + "title.png");
         arrowImage = new ImageIcon(imageBasePath + "keyboardArrow.png");
         shiftImage = new ImageIcon(imageBasePath + "shift.png");
     }
 
     public void paint(Graphics g) {
-        g.setColor(Color.WHITE);
-        g.drawRect(24, 10, 852, 55);
-        
-        titleImage.paintIcon(this, g, 25, 11);
+        if (snake.getMoves() == 0 && started == false) {
+            snakeHeadXPos = snake.start(snakeHeadXPos);
+            started = true;
+        }
+        // g.setColor(Color.WHITE);
+        // g.drawRect(24, 10, 852, 55);
+
+        // titleImage.paintIcon(this, g, 25, 11);
         // Game Border for the game
         g.setColor(Color.WHITE);
         g.drawRect(24, 71, 506, 501);
