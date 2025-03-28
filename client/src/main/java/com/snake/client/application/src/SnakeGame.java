@@ -4,20 +4,36 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+import com.snake.client.domain.aplication.Score;
 
 public class SnakeGame {
     final static String imageBasePath = "client/src/main/java/com/snake/client/resources/gameImages/";
 
     public static void main(String[] args) {
         JFrame obj = new JFrame();
-        Gameplay gameplay = new Gameplay();
-        obj.getContentPane().setBackground(Color.DARK_GRAY);
-        obj.setLayout(new BorderLayout());
-        obj.setBounds(10, 10, 910, 750);
-        obj.add(new TitlePanel(imageBasePath), BorderLayout.NORTH);
-        obj.add(gameplay, BorderLayout.CENTER);
-        obj.setResizable(false);
-        obj.setVisible(true);
+        Score score = new Score();
+        Gameplay gameplay = new Gameplay(score);
+        TitlePanel titlePanel = new TitlePanel(imageBasePath);
+        InfoPanel infoPanel = new InfoPanel(score);
+        gameplay.subscribe(infoPanel);
+
         obj.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        obj.setResizable(false);
+
+        JPanel contentPane = new JPanel(new BorderLayout());
+        contentPane.setBackground(Color.DARK_GRAY);
+        contentPane.add(titlePanel, BorderLayout.NORTH);
+        contentPane.add(gameplay, BorderLayout.CENTER);
+        contentPane.add(infoPanel, BorderLayout.EAST);
+
+        // Set content pane and size
+        obj.setContentPane(contentPane);
+        obj.setSize(910, 750); // Set size before positioning
+
+        // Position and show
+        // obj.setLocationRelativeTo(null); // Center window
+        obj.setVisible(true); // Make visible LAST
     }
 }

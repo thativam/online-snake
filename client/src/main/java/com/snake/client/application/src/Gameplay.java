@@ -1,12 +1,15 @@
 package com.snake.client.application.src;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.IntStream;
 
@@ -25,7 +28,6 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     Snake[] snakes = new Snake[4];
     Score score = new Score();
 
-    private String highScore;
     final static String imageBasePath = "client/src/main/java/com/snake/client/resources/gameImages/" + "";
     Apple[] apples = new Apple[5];
 
@@ -34,8 +36,6 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     AtomicBoolean speedUp = new AtomicBoolean(true);
 
     private ImageIcon appleImage;
-    private ImageIcon arrowImage;
-    private ImageIcon shiftImage;
     private ImageIcon snakeBody;
     private ImageIcon snakeHead;
 
@@ -62,6 +62,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         for(int i = 0; i < apples.length; i++) {
             apples[i] = new Apple(); // Criando cada instância
         }
+        // SET SNAKE BORDER CORRECT "Snake.setBOTTOM_BORDER(22);"
+        this.score = score;
         addKeyListener(this);
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
@@ -74,8 +76,6 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         snakeHead = new ImageIcon(imageBasePath + "snakeHead4.png");
         snakeBody = new ImageIcon(imageBasePath + "snakeimage4.png");
         appleImage = new ImageIcon(imageBasePath + "apple4.png");
-        arrowImage = new ImageIcon(imageBasePath + "keyboardArrow.png");
-        shiftImage = new ImageIcon(imageBasePath + "shift.png");
     }
 
     public void paint(Graphics g) {
@@ -83,13 +83,15 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
             snakeHeadXPos = snake.start(snakeHeadXPos);
             started = true;
         }
-        // g.setColor(Color.WHITE);
-        // g.drawRect(24, 10, 852, 55);
+        int gameX = 24;
+        int gameY = 71;
+        int gameWidth = 505;
+        int gameHeight = 501;
 
-        // titleImage.paintIcon(this, g, 25, 11);
+        // every thing should be heightened by 55(h-55 probably)
         // Game Border for the game
         g.setColor(Color.WHITE);
-        g.drawRect(24, 71, 506, 501);
+        g.drawRect(gameX, gameY, gameWidth, gameHeight);
 
         // Internal Panel (where the snake is going to move)
         g.setColor(Color.black);
@@ -178,18 +180,34 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
                 
             g.setColor(Color.GREEN);
             g.setFont(new Font("Courier New", Font.BOLD, 18));
-            g.drawString("Your Score : " + score.getScore(), 250, 370);
+            g.drawString("Your Score : " + score.getScore(), 220, 370);
 
             g.setColor(Color.WHITE);
             g.setFont(new Font("Courier New", Font.BOLD, 20));
-            g.drawString("Press Spacebar to restart!", 187, 400);
+            g.drawString("Press Spacebar to restart!", 157, 400);
         }
+
         g.dispose();
     }
 
     public void drawString(Graphics g, String text, int x, int y) {
         for (String line : text.split("\n"))
             g.drawString(line, x, y += g.getFontMetrics().getHeight());
+    }
+
+    public void subscribe(SubscriberData subscriber) {
+        subscribers.add(subscriber);
+    }
+
+    private void notifySubscribers(GameEvents evt) {
+        for (SubscriberData subscriber : subscribers) {
+            subscriber.updateData(evt);
+        }
+    }
+
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(GAME_WIDTH, GAME_HEIGHT);
     }
 
     @Override

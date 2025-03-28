@@ -8,6 +8,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 public class Snake {
@@ -26,6 +27,16 @@ public class Snake {
     int startingHeadPositionY;
     int[] snakexLength = new int[750];
     int[] snakeyLength = new int[750];
+
+    @Setter
+    static int TOP_BORDER = 73;
+    @Setter
+    static int BOTTOM_BORDER = 568;
+    @Setter
+    static int LEFT_BORDER = 25;
+    @Setter
+    static int RIGHT_BORDER = 524;
+
     static int snakeInitialSize = 5;
     int lengthOfSnake;
     int moves;
@@ -153,7 +164,7 @@ public class Snake {
                 } else {
                     this.snakexLength[i] = this.snakexLength[i - 1];
                 }
-                if (this.snakexLength[0] > 524) {
+                if (this.snakexLength[0] > RIGHT_BORDER) {
                     this.snakexLength[0] -= SPEED;
                     dead();
                 }
@@ -173,7 +184,7 @@ public class Snake {
                 } else {
                     this.snakexLength[i] = this.snakexLength[i - 1];
                 }
-                if (this.snakexLength[0] < 25) {
+                if (this.snakexLength[0] < LEFT_BORDER) {
                     this.snakexLength[0] += SPEED;
                     dead();
                 }
@@ -193,7 +204,7 @@ public class Snake {
                 } else {
                     this.snakeyLength[i] = this.snakeyLength[i - 1];
                 }
-                if (this.snakeyLength[0] < 73) {
+                if (this.snakeyLength[0] < TOP_BORDER) {
                     this.snakeyLength[0] += SPEED;
                     dead();
                 }
@@ -213,7 +224,7 @@ public class Snake {
                 } else {
                     this.snakeyLength[i] = this.snakeyLength[i - 1];
                 }
-                if (this.snakeyLength[0] > 568) {
+                if (this.snakeyLength[0] > BOTTOM_BORDER) {
                     this.snakeyLength[0] -= SPEED;
                     dead();
                 }

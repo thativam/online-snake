@@ -23,4 +23,9 @@ public class TitlePanel extends JPanel {
         setBackground(getBackground());
         titleImage.paintIcon(this, g, 25, 11);
     }
+
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(900, 100); // Match original title height
+    }
 }
