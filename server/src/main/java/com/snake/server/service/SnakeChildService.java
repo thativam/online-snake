@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.esotericsoftware.kryonet.Connection;
 import com.snake.server.domain.ISnakeChildServer;
 import com.snake.server.domain.SnakeChildServer;
@@ -14,6 +17,7 @@ import com.snake.server.utils.ChildServerUtils;
 public class SnakeChildService implements ISnakeChildService {
     private ISnakeChildServer server;
     private List<ISnakeChildServer> activeServers = new ArrayList<>();
+    private static final Logger logger = LoggerFactory.getLogger(SnakeChildService.class);
 
     public List<ISnakeChildServer> getActiveServers() {
         return activeServers;
@@ -23,7 +27,7 @@ public class SnakeChildService implements ISnakeChildService {
         server = new SnakeChildServer();
         int port = ChildServerUtils.findFreePorts();
         if (port == -1) {
-            System.out.println("No free ports available");
+            logger.info("No free ports available");
             return -1;
         }
         try {
@@ -31,10 +35,10 @@ public class SnakeChildService implements ISnakeChildService {
             server.addClientListener();
             server.start();
             activeServers.add(server); // TODO how to control this list? i.e when to remove server
-            System.out.println("[SERVER] Child server started on port " + port);
-            System.out.println("[SERVER] Wainting for client to connect...");
+            logger.info("[SERVER] Child server started on port " + port);
+            logger.info("[SERVER] Wainting for client to connect...");
         } catch (IOException e) {
-            System.out.println("Error binding child server to port " + port + " " + e.getMessage());
+            logger.error("Error binding child server to port " + port + " " + e.getMessage());
         }
         return port;
     }
