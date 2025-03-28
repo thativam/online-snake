@@ -107,7 +107,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         g.fillRect(25, 72, 505, 500);
 
         for (int i = 0; i < snakes.length; i++) {
-            if (snakes[i].moves == 0) {
+            if (snakes[i].getMoves() == 0) {
                 snakes[i].start();
             }
             snakes[i].paintSnake(this, g, snakeHead, snakeBody);
@@ -117,6 +117,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
             if (apples[i].getappleXPos() == snakes[playerId].getSnakexLength()[0] && (apples[i].getappleYPos() == snakes[playerId].getSnakeyLength()[0])) {
                 snakes[playerId].increaseSnakeSize();
                 score.increaseScore();
+                notifySubscribers(GameEvents.INCREASE_SCORE);
                 apples[i] = new Apple();
             }
         }
@@ -153,9 +154,10 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         // protocols made when the snake dies   
         if (snakes[playerId].isDeath()) {
             score.saveNewScore();
+            notifySubscribers(GameEvents.SNAKE_DEAD);
             g.setColor(Color.RED);
             g.setFont(new Font("Courier New", Font.BOLD, 50));
-            g.drawString("Game Over!", 190, 340);
+            g.drawString("Game Over!", 145, 340);
 
             g.setColor(Color.GREEN);
             g.setFont(new Font("Courier New", Font.BOLD, 18));
@@ -236,7 +238,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
                     timer.start();
                 }
                 if (snakes[playerId].isDeath()) {
-                    
+                    notifySubscribers(GameEvents.RESTART);
                     score.resetScore();
                     snakes[playerId].reset();
                     repaint();
