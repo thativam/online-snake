@@ -10,32 +10,32 @@ import javax.swing.JPanel;
 public class Snake {
 
     enum Direction {
-        LEFT, RIGHT, UP, DOWN, NONE;
+        RIGHT, LEFT, UP, DOWN, NONE;
 
         public boolean isOpposite(Direction direction) {
             return this == LEFT && direction == RIGHT || this == RIGHT && direction == LEFT
                     || this == UP && direction == DOWN || this == DOWN && direction == UP;
         }
     }
+    Direction startingDirection;
     Direction currentDirection;
-
     Direction nextDirection;
-
+    int startingHeadPositionX;
+    int startingHeadPositionY;
     int[] snakexLength = new int[750];
     int[] snakeyLength = new int[750];
     static int snakeInitialSize = 5;
     int lengthOfSnake;
     int moves;
     final static int SPEED = 6;
-
     boolean death;
 
-
-
-
-    public Snake(Direction currentDirection) {
-        this.currentDirection = currentDirection; // or any initial direction
-        this.nextDirection = currentDirection;
+    public Snake(int currentDirectionInt, int startingDirectionInt, int startingHeadPositionX, int startingHeadPositionY) {
+        this.startingHeadPositionX = startingHeadPositionX;
+        this.startingHeadPositionY = startingHeadPositionY;
+        this.currentDirection = Direction.values()[currentDirectionInt];
+        this.nextDirection = Direction.values()[currentDirectionInt];
+        this.startingDirection = Direction.values()[startingDirectionInt];
         this.death=false;
         this.lengthOfSnake=5;
         this.moves=0;
@@ -48,7 +48,6 @@ public class Snake {
         );
     }
     public Boolean generalCheck(){
-        
         // if snake's head's x and y positions == any other part of the snake, the snake dies
         AtomicBoolean flag = new AtomicBoolean(true);
         IntStream.range(1, this.lengthOfSnake).parallel().forEach(i -> {
@@ -59,13 +58,26 @@ public class Snake {
         return flag.get();
     }
 
-    public int start(int snakeHeadXPos){
+    public void start(){
         for (int i = 0; i < snakeInitialSize; i++) {
-            this.snakexLength[i] = snakeHeadXPos;
-            snakeHeadXPos -= SPEED;
-            this.snakeyLength[i] = 355;
+            if(startingDirection == Direction.LEFT){
+                this.snakexLength[i] = this.startingHeadPositionX + (i * SPEED);
+                this.snakeyLength[i] = this.startingHeadPositionY;
+            }
+            else if(startingDirection == Direction.RIGHT){
+                this.snakexLength[i] = this.startingHeadPositionX - (i * SPEED);
+                this.snakeyLength[i] = this.startingHeadPositionY; 
+            }
+            else if(startingDirection == Direction.UP){
+                this.snakexLength[i] = this.startingHeadPositionX;
+                this.snakeyLength[i] = this.startingHeadPositionY + (i * SPEED); 
+            }
+            else{
+                this.snakexLength[i] = this.startingHeadPositionX;
+                this.snakeyLength[i] = this.startingHeadPositionY - (i * SPEED); 
+            }
+
         }
-        return snakeHeadXPos;
     }
 
     public void moveRight(){
@@ -224,18 +236,13 @@ public class Snake {
         }
     }
 
-    public void restart() {
-        this.nextDirection = Direction.RIGHT;
-        this.currentDirection = Direction.RIGHT;
-        defaultActions();  
-    }
-
     private void defaultActions(){
         moves++;
     }
-    public void restart(Direction direction) {
-        this.nextDirection = direction;
-        this.currentDirection = direction;
+
+    public void restart() {
+        this.nextDirection = startingDirection;
+        this.currentDirection = startingDirection;
         defaultActions();
     }
 
