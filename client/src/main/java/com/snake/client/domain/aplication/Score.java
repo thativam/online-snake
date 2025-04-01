@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.snake.client.utils.StringUtils;
 
 import lombok.Getter;
@@ -48,9 +51,10 @@ public class Score {
     private List<Integer> highScoreList;
     private String scoreFilePath = "client/src/main/java/com/snake/client/resources/highscore.dat";
     private final int MAX_VALUES = 10;
+    private static final Logger logger = LoggerFactory.getLogger(Score.class);
 
-    public Score() {
-        this.score = 0;
+    public Score(){
+        this.score=0;
         this.highScoreList = new ArrayList<Integer>();
         readFile();
     }
@@ -105,7 +109,8 @@ public class Score {
             }
         } catch (Exception e) {
             highScoreList = new ArrayList<Integer>(Collections.nCopies(MAX_VALUES, 0));
-            System.out.println("there was a problem reading the file" + e);
+
+            logger.error("there was a problem reading the file", e);
         } finally {
             try {
                 if (reader != null)
@@ -139,7 +144,7 @@ public class Score {
                 }
             }
         } catch (Exception e) {
-            System.out.println("there was a problem writing the file" + e);
+            logger.error("there was a problem writing the file"+ e);
         } finally {
             try {
                 if (writer != null)
