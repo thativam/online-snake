@@ -31,7 +31,7 @@ public class App {
         try {
             System.in.read();
         } catch (IOException e) {
-            logger.error("Error reading input");
+            logger.error("Error reading input", e);
             e.printStackTrace();
         }
        
