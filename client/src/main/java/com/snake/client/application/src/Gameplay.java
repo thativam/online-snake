@@ -23,8 +23,9 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     Score score = new Score();
     
     private String highScore;
-    final static String imageBasePath = "client\\src\\main\\java\\com\\snake\\client\\resources\\gameImages\\" + ""; 
-    Apple[] apples = new Apple[10];
+    final static String imageBasePath = "client/src/main/java/com/snake/client/resources/gameImages/" + ""; 
+    Apple[] apples = new Apple[5];
+
 
     private Timer timer;
 
