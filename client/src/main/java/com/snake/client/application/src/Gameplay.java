@@ -52,6 +52,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
          * snakes[i] = new Snake(Direction.RIGHT, i*180+199, 253);
          * }
          */
+        setBackground(Color.DARK_GRAY);
         for (int i = 0; i < snakes.length; i++) {
             int xPos = i * 180 + 199;
             int yPos;
@@ -90,7 +91,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         appleImage = new ImageIcon(imageBasePath + "apple4.png");
     }
 
-    public void paint(Graphics g) {
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
         int gameX = 24;
         int gameY = 71;
         int gameWidth = 505;
@@ -167,7 +169,6 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
             g.drawString("Press Spacebar to restart!", 157, 400);
         }
 
-        g.dispose();
     }
 
     public void drawString(Graphics g, String text, int x, int y) {
