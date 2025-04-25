@@ -248,20 +248,24 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
             case KeyEvent.VK_D:
             case KeyEvent.VK_RIGHT:
                 snakes[playerId].moveRight();
+                notifySubscribers(GameEvents.SNAKE_MOVE_RIGHT);
                 repaint();
                 break;
             case KeyEvent.VK_A:
             case KeyEvent.VK_LEFT:
+                notifySubscribers(GameEvents.SNAKE_MOVE_LEFT);
                 snakes[playerId].moveLeft();
                 repaint();
                 break;
             case KeyEvent.VK_W:
             case KeyEvent.VK_UP:
+                notifySubscribers(GameEvents.SNAKE_MOVE_UP);
                 snakes[playerId].moveUp();
                 repaint();
                 break;
             case KeyEvent.VK_S:
             case KeyEvent.VK_DOWN:
+                notifySubscribers(GameEvents.SNAKE_MOVE_DOWN);
                 snakes[playerId].moveDown();
                 repaint();
                 break;

@@ -12,6 +12,7 @@ import com.snake.client.service.ISnakeClientService;
 import com.snake.client.service.SnakeClientService;
 import com.snake.client.application.src.SnakeGame;
 import com.snake.client.domain.SnakeClient;
+import com.snake.client.domain.SubscriberData;
 import com.snake.communication.servClient.Redirect;
 
 public class App {
@@ -29,8 +30,8 @@ public class App {
             e.printStackTrace();
         }
         try {
-            SnakeGame.initializeGame(null);
-            //
+            SnakeGame.initializeGame((SubscriberData) service);
+
         } catch (Exception e) {
             logger.error("Error reading input", e);
             e.printStackTrace();

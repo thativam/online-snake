@@ -9,8 +9,10 @@ import org.slf4j.LoggerFactory;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.snake.client.domain.GameEvents;
 import com.snake.client.domain.ISnakeClient;
 import com.snake.client.domain.SnakeClient;
+import com.snake.client.domain.SubscriberData;
 import com.snake.communication.servClient.Redirect;
 
 import lombok.AllArgsConstructor;
@@ -18,7 +20,7 @@ import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor
-public class SnakeClientService implements ISnakeClientService {
+public class SnakeClientService implements ISnakeClientService, SubscriberData {
     private ISnakeClient client;
     private ISnakeClient childClient;
     private List<Class<?>> classes;
@@ -103,6 +105,26 @@ public class SnakeClientService implements ISnakeClientService {
             return bytesSent;
         }
         return -1;
+    }
+
+    @Override
+    public void updateData(GameEvents event) {
+        try {
+            logger.info("Sending event: " + event);
+            switch (event) {
+                case GameEvents.SNAKE_MOVE_DOWN:
+                case GameEvents.SNAKE_MOVE_LEFT:
+                case GameEvents.SNAKE_MOVE_RIGHT:
+                case GameEvents.SNAKE_MOVE_UP:
+                    sendTCPStringSv(event.toString());
+                    break;
+                default:
+                    break;
+            }
+        } catch (Exception e) {
+            logger.error("Error sending event: " + event, e);
+        }
+
     }
 
 }

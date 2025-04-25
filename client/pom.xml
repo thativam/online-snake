@@ -26,30 +26,42 @@
       </testResource>
     </testResources>
     <plugins>
-    <plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>com.google.cloud.tools</groupId>
+        <artifactId>jib-maven-plugin</artifactId>
+        <version>3.4.5</version>
+        <configuration>
+          <from>
+            <image>eclipse-temurin:22</image>
+          </from>
+          <to>
+            <image>snk-client:latest</image>
+          </to>
+          <container>
+            <mainClass>com.snake.client.App</mainClass>
+            <!-- Optionally expose ports -->
+            <ports>
+              <port>8080</port>
+            </ports>
+          </container>
+        </configuration>
+      </plugin>
+      <plugin>
       <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-compiler-plugin</artifactId>
-    </plugin>
-    <plugin>
-      <groupId>com.google.cloud.tools</groupId>
-      <artifactId>jib-maven-plugin</artifactId>
-      <version>3.4.5</version>
+      <artifactId>maven-jar-plugin</artifactId>
+      <version>3.3.0</version>
       <configuration>
-        <from>
-          <image>eclipse-temurin:22</image>
-        </from>
-        <to>
-          <image>snk-client:latest</image>
-        </to>
-        <container>
-          <mainClass>com.snake.client.App</mainClass>
-          <!-- Optionally expose ports -->
-          <ports>
-            <port>8080</port>
-          </ports>
-        </container>
+        <archive>
+          <manifest>
+            <mainClass>com.snake.client.App</mainClass>
+          </manifest>
+        </archive>
       </configuration>
-    </plugin>
+      </plugin>
   </plugins>
   </build>
   <url>https://maven.apache.org</url>

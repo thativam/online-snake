@@ -23,6 +23,7 @@ public class SnakeGame {
         TitlePanel titlePanel = new TitlePanel(imageBasePath);
         InfoPanel infoPanel = new InfoPanel(score);
         gameplay.subscribe(infoPanel);
+        gameplay.subscribe(serverSubscriber);
 
         obj.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         obj.setResizable(false);

@@ -49,7 +49,11 @@ public class SnakeChildServer implements ISnakeChildServer {
 
             @Override
             public void received(Connection connection, Object object) {
-                logger.info("[SERVER] Received object: " + object);
+                // This will have to deal with the game events
+                // and the snake objects
+                // TODO: passing the responsability to the correct funtcion ;
+                logger.info(
+                        "[SERVER] Received object: " + object + " from client: " + connection.getRemoteAddressTCP());
             }
 
             @Override
