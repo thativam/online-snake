@@ -6,12 +6,17 @@ import java.awt.Color;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import com.snake.client.domain.SubscriberData;
 import com.snake.client.domain.aplication.Score;
 
 public class SnakeGame {
     final static String imageBasePath = "client/src/main/java/com/snake/client/resources/gameImages/";
 
     public static void main(String[] args) {
+        initializeGame(null); // This is just for testing the UI, doesnt need a server.
+    }
+
+    public static void initializeGame(SubscriberData serverSubscriber) {
         JFrame obj = new JFrame();
         Score score = new Score();
         Gameplay gameplay = new Gameplay(score);

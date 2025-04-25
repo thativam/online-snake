@@ -17,6 +17,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import com.snake.client.domain.GameEvents;
+import com.snake.client.domain.SubscriberData;
 import com.snake.client.domain.aplication.Apple;
 import com.snake.client.domain.aplication.Score;
 import com.snake.client.domain.aplication.Snake;
@@ -218,7 +220,6 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
             snakes[playerId].increaseMoves();
         }
     }
-    
 
     @Override
     public void keyTyped(KeyEvent e) {

@@ -27,6 +27,7 @@ public class SnakeClientService implements ISnakeClientService {
     public SnakeClientService(ISnakeClient client) {
         this.client = client;
     }
+
     @Override
     public void startClient(List<Class<?>> classes) {
         client.start();
@@ -82,13 +83,12 @@ public class SnakeClientService implements ISnakeClientService {
                 logger.info("Client disconnected from Child Server");
             }
         });
-        
+
         childClient.connect(5000, "localhost", childPort);
-        
+
         childClient.sendString("Hello from client");
         return childClient;
     }
-
 
     @Override
     public int sendTCPStringMs(String message) throws IOException {
@@ -98,7 +98,7 @@ public class SnakeClientService implements ISnakeClientService {
 
     @Override
     public int sendTCPStringSv(String message) throws IOException {
-        if(childClient != null) {
+        if (childClient != null) {
             int bytesSent = childClient.sendString(message);
             return bytesSent;
         }

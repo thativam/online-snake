@@ -7,6 +7,8 @@ import java.awt.Graphics;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
+import com.snake.client.domain.GameEvents;
+import com.snake.client.domain.SubscriberData;
 import com.snake.client.domain.aplication.Score;
 
 public class InfoPanel extends JPanel implements SubscriberData {
