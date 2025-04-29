@@ -58,6 +58,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
          * }
          */
         setBackground(Color.DARK_GRAY);
+        // TODO: refactor so its easy to add new snakes commming from the server
         for (int i = 0; i < snakes.length; i++) {
             int xPos = i * 180 + 199;
             int yPos;
@@ -112,6 +113,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         g.setColor(Color.black);
         g.fillRect(25, 72, 505, 500);
 
+        // TODO: refactor so its easy to add new snakes commming from the server
         for (int i = 0; i < snakes.length; i++) {
             if (snakes[i].getMoves() == 0) {
                 snakes[i].start();
@@ -119,6 +121,8 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
             snakes[i].paintSnake(this, g, snakeHead, snakeBody);
         }
 
+        // TODO: refactor so the client receive the message that a snake increased its
+        // size, also the new apple position
         for (int i = 0; i < apples.length; i++) {
             if (apples[i].getappleXPos() == snakes[playerId].getSnakexLength()[0]
                     && (apples[i].getappleYPos() == snakes[playerId].getSnakeyLength()[0])) {
@@ -129,6 +133,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         }
 
         // check if player snake has hit any part of another snake
+        //// TODO: refactor to only receive if the snake has died
         for (int j = 0; j < snakes.length; j++) {
             final int snakeId = j;
             AtomicBoolean flag = new AtomicBoolean(true);
@@ -159,6 +164,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         }
 
         // protocols made when the snake dies
+        // TODO: refactor so its easy to handle death from server.
         if (snakes[playerId].isDeath()) {
             notifySubscribers(GameEvents.SNAKE_DEAD);
             g.setColor(Color.RED);
@@ -241,7 +247,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        SnakeDto snakeDto = new SnakeDto( this.snakes[playerId].getNextDirection().getIntValue(),
+        SnakeDto snakeDto = new SnakeDto(this.snakes[playerId].getNextDirection().getIntValue(),
                 this.snakes[playerId].getSnakexLength(), this.snakes[playerId].getSnakeyLength(),
                 this.snakes[playerId].isDeath());
         switch (e.getKeyCode()) {
