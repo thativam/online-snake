@@ -13,14 +13,7 @@ import lombok.Setter;
 @Getter
 public class Snake {
 
-    public enum Direction {
-        RIGHT, LEFT, UP, DOWN, NONE;
-
-        public boolean isOpposite(Direction direction) {
-            return this == LEFT && direction == RIGHT || this == RIGHT && direction == LEFT
-                    || this == UP && direction == DOWN || this == DOWN && direction == UP;
-        }
-    }
+    
     Direction startingDirection;
     Direction currentDirection;
     Direction nextDirection;

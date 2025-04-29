@@ -6,7 +6,7 @@ import java.awt.Color;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import com.snake.client.domain.SubscriberData;
+import com.snake.client.domain.ServerSubscriber;
 import com.snake.client.domain.aplication.Score;
 
 public class SnakeGame {
@@ -16,14 +16,14 @@ public class SnakeGame {
         initializeGame(null); // This is just for testing the UI, doesnt need a server.
     }
 
-    public static void initializeGame(SubscriberData serverSubscriber) {
+    public static void initializeGame(ServerSubscriber serverSubscriber) {
         JFrame obj = new JFrame();
         Score score = new Score();
         Gameplay gameplay = new Gameplay(score);
         TitlePanel titlePanel = new TitlePanel(imageBasePath);
         InfoPanel infoPanel = new InfoPanel(score);
         gameplay.subscribe(infoPanel);
-        gameplay.subscribe(serverSubscriber);
+        gameplay.serverSubscribe(serverSubscriber);
 
         obj.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         obj.setResizable(false);

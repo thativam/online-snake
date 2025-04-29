@@ -11,8 +11,9 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.snake.client.domain.GameEvents;
 import com.snake.client.domain.ISnakeClient;
+import com.snake.client.domain.ServerSubscriber;
 import com.snake.client.domain.SnakeClient;
-import com.snake.client.domain.SubscriberData;
+import com.snake.communication.gameInfo.SnakeDto;
 import com.snake.communication.servClient.Redirect;
 
 import lombok.AllArgsConstructor;
@@ -20,7 +21,7 @@ import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor
-public class SnakeClientService implements ISnakeClientService, SubscriberData {
+public class SnakeClientService implements ISnakeClientService, ServerSubscriber {
     private ISnakeClient client;
     private ISnakeClient childClient;
     private List<Class<?>> classes;
@@ -72,7 +73,7 @@ public class SnakeClientService implements ISnakeClientService, SubscriberData {
         childClient = new SnakeClient(new Client());
         childClient.start();
         for (Class<?> clazz : classes) {
-            client.register(clazz);
+            childClient.register(clazz);
         }
         childClient.addListener(new Listener() {
             @Override
@@ -107,8 +108,19 @@ public class SnakeClientService implements ISnakeClientService, SubscriberData {
         return -1;
     }
 
+    public int sendTCPSnake(SnakeDto snakeDto) throws IOException {
+        if (childClient != null) {
+            int bytesSent = childClient.sendSnake(snakeDto);
+
+            return bytesSent;
+        }
+        return -1;
+    }
+
+
+
     @Override
-    public void updateData(GameEvents event) {
+    public void updateData(GameEvents event, Object data) {
         try {
             logger.info("Sending event: " + event);
             switch (event) {
@@ -117,6 +129,7 @@ public class SnakeClientService implements ISnakeClientService, SubscriberData {
                 case GameEvents.SNAKE_MOVE_RIGHT:
                 case GameEvents.SNAKE_MOVE_UP:
                     sendTCPStringSv(event.toString());
+                    sendTCPSnake((SnakeDto) data);
                     break;
                 default:
                     break;

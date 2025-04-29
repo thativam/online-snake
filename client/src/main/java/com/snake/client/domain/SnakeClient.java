@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Listener;
+import com.snake.communication.gameInfo.SnakeDto;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -41,6 +42,12 @@ public class SnakeClient implements ISnakeClient {
     @Override
     public int sendString(String msg) {
         return client.sendTCP(msg);
+    }
+
+    @Override
+    public int sendSnake(SnakeDto snakeDto) {
+        return client.sendTCP(snakeDto);
+
     }
 
 }

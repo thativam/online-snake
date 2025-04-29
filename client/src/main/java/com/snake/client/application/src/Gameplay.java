@@ -18,11 +18,13 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import com.snake.client.domain.GameEvents;
+import com.snake.client.domain.ServerSubscriber;
 import com.snake.client.domain.SubscriberData;
 import com.snake.client.domain.aplication.Apple;
 import com.snake.client.domain.aplication.Score;
 import com.snake.client.domain.aplication.Snake;
-import com.snake.client.domain.aplication.Snake.Direction;
+import com.snake.communication.gameInfo.SnakeDto;
+import com.snake.client.domain.aplication.Direction;
 
 public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
@@ -30,6 +32,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     private static final int GAME_HEIGHT = 550; // 501 + 49 for borders
 
     private List<SubscriberData> subscribers = new ArrayList<>();
+    private List<ServerSubscriber> serverSubscribers = new ArrayList<>();
     private Score score;
 
     Direction startingDirection = Direction.LEFT;
@@ -182,9 +185,19 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
         subscribers.add(subscriber);
     }
 
+    public void serverSubscribe(ServerSubscriber serverSubscriber) {
+        serverSubscribers.add(serverSubscriber);
+    }
+
     private void notifySubscribers(GameEvents evt) {
         for (SubscriberData subscriber : subscribers) {
             subscriber.updateData(evt);
+        }
+    }
+
+    private void notifySubscribers(GameEvents evt, Object data) {
+        for (ServerSubscriber serverSubscriber : serverSubscribers) {
+            serverSubscriber.updateData(evt, data);
         }
     }
 
@@ -228,6 +241,9 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
+        SnakeDto snakeDto = new SnakeDto( this.snakes[playerId].getNextDirection().getIntValue(),
+                this.snakes[playerId].getSnakexLength(), this.snakes[playerId].getSnakeyLength(),
+                this.snakes[playerId].isDeath());
         switch (e.getKeyCode()) {
             case KeyEvent.VK_SHIFT:
                 if (speedUp.compareAndSet(true, false)) {
@@ -248,24 +264,24 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
             case KeyEvent.VK_D:
             case KeyEvent.VK_RIGHT:
                 snakes[playerId].moveRight();
-                notifySubscribers(GameEvents.SNAKE_MOVE_RIGHT);
+                notifySubscribers(GameEvents.SNAKE_MOVE_RIGHT, snakeDto);
                 repaint();
                 break;
             case KeyEvent.VK_A:
             case KeyEvent.VK_LEFT:
-                notifySubscribers(GameEvents.SNAKE_MOVE_LEFT);
+                notifySubscribers(GameEvents.SNAKE_MOVE_LEFT, snakeDto);
                 snakes[playerId].moveLeft();
                 repaint();
                 break;
             case KeyEvent.VK_W:
             case KeyEvent.VK_UP:
-                notifySubscribers(GameEvents.SNAKE_MOVE_UP);
+                notifySubscribers(GameEvents.SNAKE_MOVE_UP, snakeDto);
                 snakes[playerId].moveUp();
                 repaint();
                 break;
             case KeyEvent.VK_S:
             case KeyEvent.VK_DOWN:
-                notifySubscribers(GameEvents.SNAKE_MOVE_DOWN);
+                notifySubscribers(GameEvents.SNAKE_MOVE_DOWN, snakeDto);
                 snakes[playerId].moveDown();
                 repaint();
                 break;

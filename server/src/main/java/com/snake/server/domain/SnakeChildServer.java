@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+import com.snake.communication.gameInfo.SnakeDto;
 import com.snake.communication.servClient.Redirect;
 
 public class SnakeChildServer implements ISnakeChildServer {
@@ -27,6 +28,8 @@ public class SnakeChildServer implements ISnakeChildServer {
         logger.info("[SERVER] Starting child server");
         server.getKryo().register(Redirect.class);
         server.getKryo().register(String.class);
+        server.getKryo().register(SnakeDto.class);
+        server.getKryo().register(int[].class);
         server.start();
     }
 
@@ -52,6 +55,17 @@ public class SnakeChildServer implements ISnakeChildServer {
                 // This will have to deal with the game events
                 // and the snake objects
                 // TODO: passing the responsability to the correct funtcion ;
+                switch (object.getClass().getSimpleName()) {
+                    case "SnakeDto":
+                        SnakeDto snakeDto = (SnakeDto) object;
+                        logger.info("[SERVER] Received SnakeDto: " + snakeDto.getSnakexLength()[0] + ", "
+                                + snakeDto.getSnakeyLength()[0] + ", "  + snakeDto.isDeath() + ", "
+                                + snakeDto.getNextDirection());
+                        break;
+                
+                    default:
+                        break;
+                }
                 logger.info(
                         "[SERVER] Received object: " + object + " from client: " + connection.getRemoteAddressTCP());
             }

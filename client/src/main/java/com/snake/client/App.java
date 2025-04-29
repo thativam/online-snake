@@ -11,8 +11,9 @@ import com.esotericsoftware.kryonet.Client;
 import com.snake.client.service.ISnakeClientService;
 import com.snake.client.service.SnakeClientService;
 import com.snake.client.application.src.SnakeGame;
+import com.snake.client.domain.ServerSubscriber;
 import com.snake.client.domain.SnakeClient;
-import com.snake.client.domain.SubscriberData;
+import com.snake.communication.gameInfo.SnakeDto;
 import com.snake.communication.servClient.Redirect;
 
 public class App {
@@ -21,7 +22,7 @@ public class App {
     public static void main(String[] args) {
 
         ISnakeClientService service = new SnakeClientService(new SnakeClient(new Client()));
-        service.startClient(new ArrayList<>(List.of(Redirect.class, String.class)));
+        service.startClient(new ArrayList<>(List.of(Redirect.class, String.class, SnakeDto.class, int[].class)));
 
         try {
             service.connectToServer();
@@ -30,7 +31,7 @@ public class App {
             e.printStackTrace();
         }
         try {
-            SnakeGame.initializeGame((SubscriberData) service);
+            SnakeGame.initializeGame((ServerSubscriber) service);
 
         } catch (Exception e) {
             logger.error("Error reading input", e);
