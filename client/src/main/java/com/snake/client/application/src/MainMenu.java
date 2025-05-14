@@ -6,18 +6,13 @@ import java.awt.Color;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import com.snake.client.domain.aplication.Score;
-
-public class SnakeGame {
+public class MainMenu {
     final static String imageBasePath = "src/main/java/com/snake/client/resources/gameImages/";
 
     public static void main(String[] args) {
         JFrame obj = new JFrame();
-        Score score = new Score();
-        Gameplay gameplay = new Gameplay(score);
         TitlePanel titlePanel = new TitlePanel(imageBasePath);
-        InfoPanel infoPanel = new InfoPanel(score);
-        gameplay.subscribe(infoPanel);
+        MenuOptions MenuOptions = new MenuOptions();
 
         obj.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         obj.setResizable(false);
@@ -25,8 +20,7 @@ public class SnakeGame {
         JPanel contentPane = new JPanel(new BorderLayout());
         contentPane.setBackground(Color.DARK_GRAY);
         contentPane.add(titlePanel, BorderLayout.NORTH);
-        contentPane.add(gameplay, BorderLayout.CENTER);
-        contentPane.add(infoPanel, BorderLayout.EAST);
+        contentPane.add(MenuOptions, BorderLayout.CENTER);
 
         // Set content pane and size
         obj.setContentPane(contentPane);
