@@ -4,15 +4,44 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.event.MouseAdapter; 
+import java.awt.event.MouseEvent;   
 import javax.swing.JPanel;
-
-import com.snake.client.domain.aplication.Score;
 
 public class MenuOptions extends JPanel {
     final static String imageBasePath = "src/main/java/com/snake/client/resources/gameImages/";
 
+    private final int SEARCH_MATCH_Y = 210;
+    private final int SETTINGS_Y = 310;
+    private final int QUIT_Y = 410;
+    private final int OPTION_HEIGHT = 30; 
+
     public MenuOptions() {
         setBackground(Color.DARK_GRAY);
+        addMouseListener(new MouseAdapter() { 
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int mouseX = e.getX();
+                int mouseY = e.getY();
+
+                int panelWidth = getWidth();
+                int searchMatchX = panelWidth / 2 - 80;
+                int settingsX = panelWidth / 2 - 50;
+                int quitX = panelWidth / 2 - 25;
+                int optionWidth = 160; 
+
+                if (mouseY >= SEARCH_MATCH_Y - OPTION_HEIGHT + 10 && mouseY <= SEARCH_MATCH_Y + 10 &&
+                    mouseX >= searchMatchX && mouseX <= searchMatchX + optionWidth) {
+                    onSearchMatchClicked();
+                } else if (mouseY >= SETTINGS_Y - OPTION_HEIGHT + 10 && mouseY <= SETTINGS_Y + 10 &&
+                           mouseX >= settingsX && mouseX <= settingsX + optionWidth) {
+                    onSettingsClicked();
+                } else if (mouseY >= QUIT_Y - OPTION_HEIGHT + 10 && mouseY <= QUIT_Y + 10 &&
+                           mouseX >= quitX && mouseX <= quitX + optionWidth) {
+                    onQuitClicked();
+                }
+            }
+        });
     }
 
     @Override
@@ -28,14 +57,26 @@ public class MenuOptions extends JPanel {
 
         g.setColor(Color.white);
         g.setFont(new Font("Helvetica", Font.BOLD, 20));
-        g.drawString("SEARCH MATCH", panelWidth/2 - 80, 210);
+        g.drawString("SEARCH MATCH", panelWidth / 2 - 80, SEARCH_MATCH_Y);
 
         g.setFont(new Font("Helvetica", Font.BOLD, 20));
-        g.drawString("SETTINGS", panelWidth/2 - 50, 310);
+        g.drawString("SETTINGS", panelWidth / 2 - 50, SETTINGS_Y);
 
         g.setFont(new Font("Helvetica", Font.BOLD, 20));
-        g.drawString("QUIT", panelWidth/2 - 25, 410);
+        g.drawString("QUIT", panelWidth / 2 - 25, QUIT_Y);
+    }
 
+    private void onSearchMatchClicked() {
+        System.out.println("SEARCH MATCH clicked!");
+    }
+
+    private void onSettingsClicked() {
+        System.out.println("SETTINGS clicked!");
+    }
+
+    private void onQuitClicked() {
+        System.out.println("QUIT clicked!");
+        System.exit(0);
     }
 
     private void drawString(Graphics g, String text, int x, int y) {
