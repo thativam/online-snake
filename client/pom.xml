@@ -55,7 +55,7 @@
       <artifactId>exec-maven-plugin</artifactId>
       <version>3.1.0</version>
       <configuration>
-          <mainClass>com.snake.client.application.src.MainMenu</mainClass>
+          <mainClass>com.snake.client.application.src.GameManager</mainClass>
       </configuration>
     </plugin>
   </plugins>

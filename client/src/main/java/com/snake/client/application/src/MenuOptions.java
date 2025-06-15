@@ -1,24 +1,31 @@
+// Em MenuOptions.java
+
 package com.snake.client.application.src;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.event.MouseAdapter; 
-import java.awt.event.MouseEvent;   
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.JPanel;
 
 public class MenuOptions extends JPanel {
-    final static String imageBasePath = "src/main/java/com/snake/client/resources/gameImages/";
-
+    // ... (suas variáveis existentes)
     private final int SEARCH_MATCH_Y = 210;
     private final int SETTINGS_Y = 310;
     private final int QUIT_Y = 410;
-    private final int OPTION_HEIGHT = 30; 
+    private final int OPTION_HEIGHT = 30;
 
-    public MenuOptions() {
+    // Adicione um campo para a ação de callback
+    private final Runnable onSearchMatchAction;
+
+    // Modifique o construtor para aceitar a ação
+    public MenuOptions(Runnable onSearchMatchAction) {
+        this.onSearchMatchAction = onSearchMatchAction; // Armazene a ação
+
         setBackground(Color.DARK_GRAY);
-        addMouseListener(new MouseAdapter() { 
+        addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 int mouseX = e.getX();
@@ -28,7 +35,7 @@ public class MenuOptions extends JPanel {
                 int searchMatchX = panelWidth / 2 - 80;
                 int settingsX = panelWidth / 2 - 50;
                 int quitX = panelWidth / 2 - 25;
-                int optionWidth = 160; 
+                int optionWidth = 160;
 
                 if (mouseY >= SEARCH_MATCH_Y - OPTION_HEIGHT + 10 && mouseY <= SEARCH_MATCH_Y + 10 &&
                     mouseX >= searchMatchX && mouseX <= searchMatchX + optionWidth) {
@@ -44,6 +51,7 @@ public class MenuOptions extends JPanel {
         });
     }
 
+    // ... (paintComponent e outros métodos permanecem os mesmos)
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -66,8 +74,13 @@ public class MenuOptions extends JPanel {
         g.drawString("QUIT", panelWidth / 2 - 25, QUIT_Y);
     }
 
+
     private void onSearchMatchClicked() {
-        System.out.println("SEARCH MATCH clicked!");
+        System.out.println("SEARCH MATCH clicked! Triggering screen change...");
+        // Execute a ação que foi passada no construtor
+        if (onSearchMatchAction != null) {
+            onSearchMatchAction.run();
+        }
     }
 
     private void onSettingsClicked() {
@@ -78,12 +91,8 @@ public class MenuOptions extends JPanel {
         System.out.println("QUIT clicked!");
         System.exit(0);
     }
-
-    private void drawString(Graphics g, String text, int x, int y) {
-        for (String line : text.split("\n"))
-            g.drawString(line, x, y += g.getFontMetrics().getHeight());
-    }
-
+    
+    // ... (seus outros métodos como drawString e getPreferredSize)
     @Override
     public Dimension getPreferredSize() {
         return new Dimension(230, 700);
