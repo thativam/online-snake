@@ -1,21 +1,21 @@
+// Em MainMenu.java
+
 package com.snake.client.application.src;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import javax.swing.JPanel;
 
-public class SnakeGame {
+public class MainMenu {
     final static String imageBasePath = "src/main/java/com/snake/client/resources/gameImages/";
-
-    public static JPanel createGamePanel(Gameplay gameplay, InfoPanel infoPanel) {
+    public static JPanel createMainMenuPanel(Runnable onSearchMatchAction) {
         TitlePanel titlePanel = new TitlePanel(imageBasePath);
-
+        MenuOptions menuOptions = new MenuOptions(onSearchMatchAction);
 
         JPanel contentPane = new JPanel(new BorderLayout());
         contentPane.setBackground(Color.DARK_GRAY);
         contentPane.add(titlePanel, BorderLayout.NORTH);
-        contentPane.add(gameplay, BorderLayout.CENTER);
-        contentPane.add(infoPanel, BorderLayout.EAST);
+        contentPane.add(menuOptions, BorderLayout.CENTER);
 
         return contentPane;
     }

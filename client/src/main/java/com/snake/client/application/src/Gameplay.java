@@ -36,7 +36,7 @@ public class Gameplay extends JPanel implements KeyListener, ActionListener {
     Snake[] snakes = new Snake[4];
     Apple[] apples = new Apple[10];
 
-    final static String imageBasePath = "client/src/main/java/com/snake/client/resources/gameImages/" + "";
+    final static String imageBasePath = "src/main/java/com/snake/client/resources/gameImages/" + "";
 
     private Timer timer;
 

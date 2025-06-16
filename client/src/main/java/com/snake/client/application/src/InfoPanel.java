@@ -13,7 +13,7 @@ public class InfoPanel extends JPanel implements SubscriberData {
     private Score score;
     private ImageIcon arrowImage;
     private ImageIcon shiftImage;
-    final static String imageBasePath = "client/src/main/java/com/snake/client/resources/gameImages/";
+    final static String imageBasePath = "src/main/java/com/snake/client/resources/gameImages/";
 
     public InfoPanel(Score score) {
         this.score = score;
